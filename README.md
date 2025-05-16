@@ -1,4 +1,3 @@
----
 **Wowhead Tooltips Shortcode**
     * Contributors: Strogino
     * Donate link: https://pro-wow.ru/
