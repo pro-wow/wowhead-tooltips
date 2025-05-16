@@ -1,15 +1,15 @@
 **Wowhead Tooltips Shortcode**
-    * Contributors: Strogino
-    * Donate link: https://pro-wow.ru/
-    * Tags: wowhead, tooltips, shortcode, world of warcraft, wow, classic, wotlk, cata, mop, retail, подсказки, шорткод, вов, 浮动信息
-    * Requires at least: 5.0
-    * Tested up to: 6.8
-    * Requires PHP: 7.4
-    * Stable tag: 3.1.1
-    * License: GPLv2 or later
-    * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+* Contributors: Strogino
+* Donate link: https://pro-wow.ru/
+* Tags: wowhead, tooltips, shortcode, world of warcraft, wow, classic, wotlk, cata, mop, retail, подсказки, шорткод, вов, 浮动信息
+* Requires at least: 5.0
+* Tested up to: 6.8
+* Requires PHP: 7.4
+* Stable tag: 3.1.1
+* License: GPLv2 or later
+* License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin allows you to easily display interactive Wowhead tooltips for World of Warcraft entities using a simple shortcode. It supports multiple game versions and languages. For more details, please select your preferred language below.
+### This plugin allows you to easily display interactive Wowhead tooltips for World of Warcraft entities using a simple shortcode. It supports multiple game versions and languages. For more details, please select your preferred language below.
 
 ---
 
