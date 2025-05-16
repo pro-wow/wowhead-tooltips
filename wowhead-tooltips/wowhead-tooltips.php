@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Wowhead Tooltips Shortcode
  * Plugin URI: https://github.com/pro-wow/wowhead-tooltips/
- * Description: Displays Wowhead tooltips via the [wowhead] shortcode. Supports various languages, game versions, and object types with advanced customization.
+ * Description: Displays Wowhead tooltips via the [wowhead] shortcode. Look for all the details /wp-content/plugins/wowhead-tooltips/FAQ .
  * Version: 3.1.1
  * Author: Strogino (Vladislav)
  * Author URI: https://pro-wow.ru/
