@@ -55,7 +55,7 @@ This tool is ideal for fan sites, guild pages, or any content creator looking to
 ### Installation
 
 1.  **Upload via WordPress Admin:**
-    * Download the plugin ZIP file from the [GitHub repository](https://github.com/pro-wow/wowhead-tooltips/) or [pro-wow.ru](https://pro-wow.ru/).
+    * Download the plugin ZIP file from the [GitHub repository](https://github.com/pro-wow/wowhead-tooltips/) or [pro-wow.ru](https://pro-wow.ru/?utm_source=github&utm_medium=organic&utm_campaign=wowhead-tooltips).
     * In your WordPress admin panel, go to "Plugins" > "Add New".
     * Click "Upload Plugin" at the top.
     * Choose the downloaded ZIP file and click "Install Now".
@@ -256,7 +256,7 @@ Contributions are welcome! Please feel free to fork the repository on [GitHub](h
 ### Установка
 
 1.  **Загрузка через админ-панель WordPress:**
-    * Скачайте ZIP-архив плагина с [репозитория GitHub](https://github.com/pro-wow/wowhead-tooltips/) или [pro-wow.ru](https://pro-wow.ru/).
+    * Скачайте ZIP-архив плагина с [репозитория GitHub](https://github.com/pro-wow/wowhead-tooltips/) или [pro-wow.ru](https://pro-wow.ru/?utm_source=github&utm_medium=organic&utm_campaign=wowhead-tooltips).
     * В вашей админ-панели WordPress перейдите в "Плагины" > "Добавить новый".
     * Нажмите "Загрузить плагин" вверху страницы.
     * Выберите скачанный ZIP-файл и нажмите "Установить".
@@ -457,7 +457,7 @@ Contributions are welcome! Please feel free to fork the repository on [GitHub](h
 ### 安装 (Installation)
 
 1.  **通过 WordPress 后台上传：**
-    * 从 [GitHub 仓库](https://github.com/pro-wow/wowhead-tooltips/) 或 [pro-wow.com](https://pro-wow.ru/) 下载插件 ZIP 文件。
+    * 从 [GitHub 仓库](https://github.com/pro-wow/wowhead-tooltips/) 或 [pro-wow.com](https://pro-wow.ru/?utm_source=github&utm_medium=organic&utm_campaign=wowhead-tooltips) 下载插件 ZIP 文件。
     * 在您的 WordPress 后台，转到“插件” > “添加新插件”。
     * 点击顶部的“上传插件”。
     * 选择下载的 ZIP 文件，然后点击“立即安装”。
