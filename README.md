@@ -1,4 +1,5 @@
-** Wowhead Tooltips Shortcode**
+---
+**Wowhead Tooltips Shortcode**
     * Contributors: Strogino
     * Donate link: https://pro-wow.ru/
     * Tags: wowhead, tooltips, shortcode, world of warcraft, wow, classic, wotlk, cata, mop, retail, подсказки, шорткод, вов, 浮动信息
