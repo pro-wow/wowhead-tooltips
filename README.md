@@ -1,6 +1,6 @@
 **Wowhead Tooltips Shortcode**
 * Contributors: Strogino
-* Donate link: https://pro-wow.ru/
+* Donate link: [pro-wow.ru](https://pro-wow.ru/?utm_source=github&utm_medium=organic&utm_campaign=wowhead-tooltips)
 * Tags: wowhead, tooltips, shortcode, world of warcraft, wow, classic, wotlk, cata, mop, retail, подсказки, шорткод, вов, 浮动信息
 * Requires at least: 5.0
 * Tested up to: 6.8
