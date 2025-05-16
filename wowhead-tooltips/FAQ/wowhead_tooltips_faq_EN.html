@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+
+  <title>Wowhead Tooltips: Comprehensive Guide & FAQ</title>
+
+  <style>
+    body { 
+      padding-top: 20px; 
+      padding-bottom: 20px; 
+      font-family: 'Roboto', sans-serif; 
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Roboto', sans-serif; 
+      font-weight: 700; 
+      scroll-margin-top: 80px; 
+    }
+    .section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+    .section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    h2 { margin-top: 40px; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+    h3 { margin-top: 30px; margin-bottom: 15px; }
+    h4 { margin-top: 25px; margin-bottom: 10px; font-size: 1.25rem; font-weight: 700; }
+    
+    code:not([class*="language-"]) { 
+      font-family: 'Roboto Mono', monospace; 
+      background-color: #f8f9fa; 
+      padding: 0.2em 0.4em; 
+      margin: 0; 
+      font-size: 85%; 
+      border-radius: 3px; 
+      color: #d63384; 
+    }
+    pre { 
+      font-family: 'Roboto Mono', monospace; 
+      background-color: #f8f9fa; 
+      border: 1px solid #dee2e6; 
+      border-radius: 0.25rem; 
+      padding: 1rem; 
+      white-space: pre-wrap; 
+      word-wrap: break-word; 
+      font-size: 0.875em; 
+    }
+    pre code { 
+      font-family: 'Roboto Mono', monospace !important; 
+      background-color: transparent !important; 
+      padding: 0; margin: 0; 
+      font-size: inherit; 
+      border-radius: 0; 
+      color: inherit; 
+    }
+    table { margin-bottom: 1rem; }
+    .table th, .table td { vertical-align: middle; }
+    .navbar { margin-bottom: 30px; position: sticky; top: 0; z-index: 1030; }
+    #sidebarMenu { position: sticky; top: 80px; height: calc(100vh - 100px); overflow-y: auto; padding-top: 20px; z-index: 1020; }
+    .table-responsive { margin-top: 1rem; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+
+  <div class="container"> 
+    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded mb-4 shadow-sm">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <i class="fas fa-book-open me-2"></i>Wowhead Tooltips FAQ
+        </a>
+      </div>
+    </nav>
+
+    <div class="row">
+      <div class="col-lg-4"> 
+        <nav id="sidebarMenu" class="d-none d-lg-block bg-light sidebar p-3 rounded"> 
+          <div class="position-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="#section1"> 
+                  <i class="fas fa-play-circle me-2"></i>1. Introduction
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#section2">
+                  <i class="fas fa-cogs me-2"></i>2. Core Components
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#section3">
+                  <i class="fas fa-brain me-2"></i>3. Understanding power.js Logic
+                </a>
+                <ul class="nav flex-column ms-3">
+                    <li class="nav-item"><a class="nav-link" href="#section3_1">3.1. Game Environments</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#section3_2">3.2. Languages</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#section3_3">3.3. Matching Language & Version</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#section4">
+                  <i class="fas fa-cubes me-2"></i>4. Wowhead Entities
+                </a>
+                 <ul class="nav flex-column ms-3">
+                    <li class="nav-item"><a class="nav-link" href="#section4_1">4.1. Classification</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#section4_2">4.2. Dependency Map</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#section5">
+                  <i class="fas fa-file-code me-2"></i>5. Working with XML Data
+                </a>
+                <ul class="nav flex-column ms-3">
+                    <li class="nav-item"><a class="nav-link" href="#section5_1">5.1. Environment Requirements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#section5_2">5.2. XML Request URLs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#section5_3">5.3. Data from XML</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#section6">
+                  <i class="fas fa-balance-scale me-2"></i>6. power.js vs. XML
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#section7">
+                  <i class="fas fa-lightbulb me-2"></i>7. Useful Tips & Tricks
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="col-lg-8"> 
+        <main>
+          <div class="p-5 mb-4 bg-body-tertiary rounded-3">
+            <div class="container-fluid py-5">
+              <h1 class="display-5 fw-bold" id="main-title"><i class="fas fa-book me-3"></i>Wowhead Tooltips</h1>
+              <p class="col-lg-10 fs-4"> 
+                A comprehensive guide and FAQ for using the <code>power.js</code> script (<code>https://wow.zamimg.com/widgets/power.js</code>) to display Wowhead tooltips.
+              </p>
+            </div>
+          </div>
+
+          <section id="section1" class="section">
+            <h2><i class="fas fa-play-circle me-2"></i>1. Introduction</h2>
+            <p>Welcome to the complete guide for Wowhead Tooltips, powered by the <code>power.js</code> widget (<code>https://wow.zamimg.com/widgets/power.js</code>). The purpose of this document is to consolidate knowledge, clarify functionalities, and provide a detailed reference for developers and Wowhead staff working with or documenting this powerful tool.</p>
+            <p>The <code>https://wow.zamimg.com/widgets/power.js</code> script allows websites to display rich, interactive tooltips for various World of Warcraft (and other Blizzard games) entities by simply linking to Wowhead or using specific data attributes. This guide primarily focuses on its application for World of Warcraft.</p>
+            <p>This document synthesizes information from the analysis of the <code>https://wow.zamimg.com/widgets/power.js</code> script itself, observed API usage patterns, and common integration practices.</p>
+          </section>
+
+          <section id="section2" class="section">
+            <h2><i class="fas fa-cogs me-2"></i>2. Core Components: <code>power.js</code> and <code>whTooltips</code></h2>
+            <p>The magic behind Wowhead Tooltips lies in the <code>https://wow.zamimg.com/widgets/power.js</code> script. To initialize and configure its behavior on a webpage, a global JavaScript object named <code>whTooltips</code> (historically, <code>wowhead_tooltips</code> was also used) must be defined <strong>before</strong> <code>https://wow.zamimg.com/widgets/power.js</code> is loaded.</p>
+            
+            <h3>Basic HTML Setup Example:</h3>
+            <pre><code class="language-markup">&lt;script&gt;
+const whTooltips = {
+  colorLinks: true,  // Allows Wowhead to apply quality colors to links
+  iconizeLinks: true, // Allows Wowhead to add icons next to links
+  renameLinks: true,  // Allows Wowhead to rename link text to the official entity name
+  iconSize: 'tiny'   // Default size for icons ('tiny', 'small', 'medium', 'large')
+};
+&lt;/script&gt;
+&lt;script src="https://wow.zamimg.com/widgets/power.js"&gt;&lt;/script&gt;</code></pre>
+            
+            <h4>Key Parameters of the <code>whTooltips</code> Object:</h4>
+            <ul>
+              <li><code>colorLinks: true</code> — Allows <code>https://wow.zamimg.com/widgets/power.js</code> to apply standard Wowhead quality colors to links.</li>
+              <li><code>iconizeLinks: true</code> — Allows <code>https://wow.zamimg.com/widgets/power.js</code> to automatically add icons next to links.</li>
+              <li><code>renameLinks: true</code> — Allows <code>https://wow.zamimg.com/widgets/power.js</code> to change the link text to the official entity name from the Wowhead database.</li>
+              <li><code>iconSize: 'tiny'</code> — Sets the default size for icons added by the script. Available values: <code>'tiny'</code>, <code>'small'</code>, <code>'medium'</code>, <code>'large'</code>.</li>
+            </ul>
+            
+            <h3>Important Note on <code>whTooltips</code> Configuration:</h3>
+            <p>The <code>whTooltips</code> object is a <strong>global configuration</strong> for all tooltips on a single page. The <code>https://wow.zamimg.com/widgets/power.js</code> script reads this object once upon initialization. This means settings like <code>iconSize</code>, <code>colorLinks</code>, and <code>renameLinks</code> will apply universally to all Wowhead tooltips rendered by that instance of <code>https://wow.zamimg.com/widgets/power.js</code> on the page. Individual customization of these parameters for each separate link via <code>whTooltips</code> is not possible. Instead, to change the appearance of individual links (e.g., text or color), plugins or custom scripts should directly modify the HTML attributes of these links, after first setting the corresponding global flags in <code>whTooltips</code> (e.g., <code>colorLinks: false</code>, <code>renameLinks: false</code>) to prevent <code>https://wow.zamimg.com/widgets/power.js</code> from overriding these changes.</p>
+          </section>
+
+          <section id="section3" class="section">
+            <h2><i class="fas fa-brain me-2"></i>3. Understanding <code>power.js</code> Logic</h2>
+            <p>To effectively use <code>https://wow.zamimg.com/widgets/power.js</code>, it's important to understand how it handles different game versions, languages, and data types.</p>
+
+            <h3 id="section3_1">3.1. Game Environments and Versions</h3>
+            <p>The <code>https://wow.zamimg.com/widgets/power.js</code> script internally manages data for different games and their states (live, PTR, beta, classic, etc.) using a system of "data environments" and "data trees".</p>
+            
+            <h4>Internal Identifiers in <code>power.js</code>:</h4>
+            <p>Analysis of the <code>https://wow.zamimg.com/widgets/power.js</code> script reveals the use of internal constants such as:</p>
+            <ul>
+              <li><code>WH.dataEnv</code>: Defines specific game versions and states (e.g., <code>MAIN: 1</code> for Retail Live, <code>CLASSIC: 4</code> for Classic Era, <code>WRATH: 8</code> for WotLK Classic, etc.).</li>
+              <li><code>WH.dataEnvKey</code>: Maps numerical IDs to text keys (e.g., <code>1:"live"</code>, <code>4:"classic"</code>, <code>8:"wrath"</code>).</li>
+              <li><code>WH.dataTree</code>: Groups environments into broader categories (e.g., <code>RETAIL: 1</code>, <code>CLASSIC: 4</code>).</li>
+            </ul>
+
+            <h4>Mapping to the <code>domain</code> Parameter:</h4>
+            <p>The <code>domain</code> parameter in links or <code>data-wowhead</code> attributes is used to tell <code>https://wow.zamimg.com/widgets/power.js</code> which game version and language to display. This parameter is key for correct localized and version-specific tooltips. Below is a table of common <code>domain</code> values and their presumed correspondence.</p>
+            
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered caption-top">
+                <caption><i class="fas fa-globe-americas me-1"></i>Table 1: Mapping <code>domain</code> Parameter to Wowhead Versions</caption>
+                <thead class="table-dark">
+                  <tr>
+                    <th><code>domain</code> (User Input)</th>
+                    <th>Corresponding Wowhead Site (Example)</th>
+                    <th>Internal <code>power.js</code> Key (Presumed)</th>
+                    <th><code>WH.dataEnv</code> (Presumed)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>(empty or <code>en</code>)</td><td><code>www.wowhead.com/</code></td><td><code>live</code></td><td><code>MAIN</code> (1)</td></tr>
+                  <tr><td><code>ru</code></td><td><code>www.wowhead.com/ru/</code></td><td><code>ru</code> (uses <code>live</code>)</td><td><code>MAIN</code> (1)</td></tr>
+                  <tr><td><code>de</code></td><td><code>www.wowhead.com/de/</code></td><td><code>de</code> (uses <code>live</code>)</td><td><code>MAIN</code> (1)</td></tr>
+                  <tr><td><code>cn</code></td><td><code>www.wowhead.com/cn/</code></td><td><code>cn</code> (uses <code>live</code>)</td><td><code>MAIN</code> (1)</td></tr>
+                  <tr><td><code>classic</code></td><td><code>www.wowhead.com/classic/</code></td><td><code>classic</code></td><td><code>CLASSIC</code> (4)</td></tr>
+                  <tr><td><code>ru.classic</code></td><td><code>www.wowhead.com/classic/ru/</code></td><td><code>ru.classic</code></td><td><code>CLASSIC</code> (4)</td></tr>
+                  <tr><td><code>tbc</code></td><td><code>www.wowhead.com/tbc/</code></td><td><code>tbc</code></td><td><code>TBC</code> (5)</td></tr>
+                  <tr><td><code>es.tbc</code></td><td><code>www.wowhead.com/tbc/es/</code></td><td><code>es.tbc</code></td><td><code>TBC</code> (5)</td></tr>
+                  <tr><td><code>wotlk</code></td><td><code>www.wowhead.com/wotlk/</code></td><td><code>wotlk</code> (corresponds to <code>wrath</code>)</td><td><code>WRATH</code> (8)</td></tr>
+                  <tr><td><code>fr.wotlk</code></td><td><code>www.wowhead.com/wotlk/fr/</code></td><td><code>fr.wotlk</code></td><td><code>WRATH</code> (8)</td></tr>
+                  <tr><td><code>cata</code></td><td><code>www.wowhead.com/cata/</code></td><td><code>cata</code></td><td><code>CATA</code> (11)</td></tr>
+                  <tr><td><code>ko.cata</code></td><td><code>www.wowhead.com/cata/ko/</code></td><td><code>ko.cata</code></td><td><code>CATA</code> (11)</td></tr>
+                  <tr><td><code>mop-classic</code></td><td><code>www.wowhead.com/mop-classic/</code></td><td><code>mop-classic</code> (corresponds to <code>mists</code>)</td><td><code>MISTS</code> (15)</td></tr>
+                  <tr><td><code>ptr</code></td><td><code>www.wowhead.com/ptr/</code></td><td><code>ptr</code></td><td><code>PTR</code> (2)</td></tr>
+                  <tr><td><code>beta</code></td><td><code>www.wowhead.com/beta/</code></td><td><code>beta</code></td><td><code>BETA</code> (3)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="mt-2"><strong>Note:</strong> <code>https://wow.zamimg.com/widgets/power.js</code> uses internal functions (e.g., <code>WH.getLocaleFromDomain.L</code>, <code>WH.getDataEnvFromKey</code>) to map these string representations to numerical identifiers.</p>
+
+            <h4>PTR and Beta Versions:</h4>
+            <ul>
+              <li>PTR (Public Test Realm): URL <code>https://www.wowhead.com/ptr/</code>, parameter <code>domain=ptr</code>.</li>
+              <li>Beta: URL <code>https://www.wowhead.com/beta/</code>, parameter <code>domain=beta</code>.</li>
+            </ul>
+            <p>These versions usually provide tooltips only in English.</p>
+
+            <h3 id="section3_2">3.2. Languages</h3>
+            <p><code>https://wow.zamimg.com/widgets/power.js</code> supports tooltip localization for multiple languages. The main language domains that can be used in the <code>domain</code> parameter include:</p>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="col"><div class="p-2 border bg-light rounded"><code>en</code> - English (often default)</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>ru</code> - Russian</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>de</code> - German</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>es</code> - Spanish</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>fr</code> - French</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>it</code> - Italian</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>pt</code> - Portuguese (usually PT-BR)</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>ko</code> - Korean</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>cn</code> - Chinese (Simplified)</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>tw</code> - Chinese (Traditional)</div></div>
+            </div>
+            <p class="mt-3">Internally, <code>https://wow.zamimg.com/widgets/power.js</code> maps these language codes to numerical locale IDs (e.g., via the <code>WH.getLocaleFromDomain.L</code> object, where <code>ru:7</code>, <code>de:3</code>, etc.).</p>
+
+            <h3 id="section3_3">3.3. Matching Language and Game Version</h3>
+            <p>To correctly display tooltips for a specific game version in a specific language, the combined <code>domain</code> parameter is used.</p>
+            <ul>
+              <li><strong>Format <code>language.version</code>:</strong> This is the preferred and most correct format. Examples: <code>ru.classic</code>, <code>de.wotlk</code>, <code>cn.cata</code>, <code>fr.mop-classic</code>. The <code>https://wow.zamimg.com/widgets/power.js</code> script parses such a domain, applying the specified language locale to the data of the corresponding game version.</li>
+              <li><strong>Format <code>version.language</code> (not recommended):</strong> Although some systems may attempt to automatically correct this format (e.g., <code>classic.ru</code> to <code>ru.classic</code>), the <code>language.version</code> format should always be used for reliability.</li>
+              <li><strong>Version only (e.g., <code>domain=classic</code>, <code>domain=wotlk</code>):</strong> In this case, <code>https://wow.zamimg.com/widgets/power.js</code> will use data for the specified game version. The default language for such a version is usually English, unless otherwise determined by the specific implementation logic (e.g., a plugin).</li>
+              <li><strong>Language only (e.g., <code>domain=ru</code>, <code>domain=de</code>):</strong> This implies the Retail version of the game in the specified language.</li>
+            </ul>
+          </section>
+          
+          <section id="section4" class="section">
+            <h2><i class="fas fa-cubes me-2"></i>4. Wowhead Entities (Data Types)</h2>
+            <p>Wowhead deals with numerous different types of game data, referred to as "entities." The <code>https://wow.zamimg.com/widgets/power.js</code> script uses an internal system of numerical identifiers for these types, defined in the <code>WH.Types</code> object. For better understanding, these entities can be conceptually grouped based on their role and prevalence.</p>
+
+            <h3 id="section4_1">4.1. Entity Classification</h3>
+            <p>Below is an attempt to classify entities based on their typical use and importance.</p>
+
+            <h4><i class="fas fa-star me-1"></i>Category 1: Core (Mandatory) Entities</h4>
+            <p>These are fundamental types necessary for displaying key World of Warcraft game information. They are widely used and are often the objects of requests for tooltips.</p>
+            <ul class="list-group mb-3">
+              <li class="list-group-item"><strong><code>item</code></strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.ITEM: 3</span><br>Equipment, consumables, reagents, etc.</li>
+              <li class="list-group-item"><strong><code>spell</code></strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.SPELL: 6</span><br>Player/NPC abilities, item effects.</li>
+              <li class="list-group-item"><strong><code>quest</code></strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.QUEST: 5</span><br>In-game quests.</li>
+              <li class="list-group-item"><strong><code>npc</code></strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.NPC: 1</span><br>Any computer-controlled characters.</li>
+              <li class="list-group-item"><strong><code>zone</code></strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.ZONE: 7</span><br>Locations, dungeons, raids, cities.</li>
+              <li class="list-group-item"><strong><code>achievement</code></strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.ACHIEVEMENT: 10</span><br>In-game achievements.</li>
+              <li class="list-group-item"><strong><code>object</code></strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.OBJECT: 2</span><br>Interactive world objects (chests, ore nodes, herbs, etc.).</li>
+              <li class="list-group-item"><strong><code>faction</code></strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.FACTION: 8</span><br>In-game factions and reputations.</li>
+              <li class="list-group-item"><strong><code>player-class</code></strong> (string ID: <code>class</code>) <span class="badge bg-primary rounded-pill float-end">WH.Types.PLAYER_CLASS: 13</span><br>Playable classes (Warrior, Mage, etc.).</li>
+              <li class="list-group-item"><strong><code>race</code></strong> (string ID: <code>race</code>) <span class="badge bg-primary rounded-pill float-end">WH.Types.RACE: 14</span><br>Playable races (Human, Orc, etc.).</li>
+              <li class="list-group-item"><strong><code>skill</code></strong> (string ID: <code>skill</code>) <span class="badge bg-primary rounded-pill float-end">WH.Types.SKILL: 15</span><br>Primary and secondary professions, weapon skills.</li>
+            </ul>
+
+            <h4><i class="fas fa-puzzle-piece me-1"></i>Category 2: Supplementary (Optional) Entities</h4>
+            <p>These types usually extend or supplement core entities, or relate to specific game systems and mechanics (e.g., from particular expansions). They may not always be available or relevant.</p>
+            <ul class="list-group mb-3">
+              <li class="list-group-item"><strong><code>item-set</code></strong> <span class="badge bg-info rounded-pill float-end">WH.Types.ITEM_SET: 4</span><br>Equipment sets with set bonuses.</li>
+              <li class="list-group-item"><strong><code>title</code></strong> <span class="badge bg-info rounded-pill float-end">WH.Types.TITLE: 11</span><br>Character titles.</li>
+              <li class="list-group-item"><strong><code>event</code></strong> <span class="badge bg-info rounded-pill float-end">WH.Types.EVENT: 12</span><br>In-game holidays, seasonal and world events.</li>
+              <li class="list-group-item"><strong><code>currency</code></strong> <span class="badge bg-info rounded-pill float-end">WH.Types.CURRENCY: 17</span><br>Various types of in-game currency (Honor, Valor, specific event tokens).</li>
+              <li class="list-group-item"><strong><code>affix</code></strong> <span class="badge bg-info rounded-pill float-end">WH.Types.AFFIX: 40</span><br>Mythic+ dungeon modifiers.</li>
+              <li class="list-group-item"><strong><code>transmog-set</code></strong> <span class="badge bg-info rounded-pill float-end">WH.Types.TRANSMOG_SET: 101</span><br>Predefined appearance sets for transmogrification.</li>
+              <li class="list-group-item"><strong><code>outfit</code></strong> <span class="badge bg-info rounded-pill float-end">WH.Types.OUTFIT: 110</span><br>User-saved equipment sets for quick changes.</li>
+              <li class="list-group-item"><strong><code>hunter-pet</code></strong> <span class="badge bg-info rounded-pill float-end">WH.Types.HUNTER_PET: 9</span><br>Abilities and information about Hunter class pets.</li>
+              <li class="list-group-item"><strong><code>guide</code></strong> <span class="badge bg-info rounded-pill float-end">WH.Types.GUIDE: 100</span><br>Guide articles on the Wowhead site.</li>
+              <li class="list-group-item"><strong><code>icon</code></strong> <span class="badge bg-info rounded-pill float-end">WH.Types.ICON: 29</span><br>Individual game icons (rarely used for direct tooltips, more often as part of other entities).</li>
+              <li class="list-group-item"><strong><code>sound</code></strong> <span class="badge bg-info rounded-pill float-end">WH.Types.SOUND: 19</span><br>In-game sound files.</li>
+              <li class="list-group-item">... and many other more specific types, such as <code>building</code>, <code>follower</code>, <code>mission</code>, <code>azerite-essence</code>, <code>azerite-essence-power</code>, <code>storyline</code>, <code>profession-trait</code>, <code>battle-pet-ability</code>, <code>trading-post-activity</code>. Refer to the <code>WH.Types</code> object in the <code>https://wow.zamimg.com/widgets/power.js</code> script for a complete list.</li>
+            </ul>
+
+            <h4><i class="fas fa-link me-1"></i>Category 3: Standalone System Entities</h4>
+            <p>These types often define basic game conditions or system elements and can exist independently. Some may overlap with Core entities as they are fundamental, but their context can be more general.</p>
+            <ul class="list-group mb-3">
+              <li class="list-group-item"><strong><code>resource</code></strong> <span class="badge bg-secondary rounded-pill float-end">WH.Types.RESOURCE: 27</span><br>E.g., garrison or order hall resources.</li>
+              <li class="list-group-item"><strong><code>race</code></strong> <span class="badge bg-secondary rounded-pill float-end">WH.Types.RACE: 14</span><br>As a general concept defining available races (also in Core).</li>
+              <li class="list-group-item"><strong><code>player-class</code></strong> <span class="badge bg-secondary rounded-pill float-end">WH.Types.PLAYER_CLASS: 13</span><br>As a general concept defining available classes (also in Core).</li>
+              <li class="list-group-item"><strong><code>zone</code></strong> <span class="badge bg-secondary rounded-pill float-end">WH.Types.ZONE: 7</span><br>As a general concept of a territory (also in Core).</li>
+              <li class="list-group-item"><strong><code>faction</code></strong> <span class="badge bg-secondary rounded-pill float-end">WH.Types.FACTION: 8</span><br>As a general concept of allegiance (also in Core).</li>
+            </ul>
+            <p class="mt-2"><strong>Note on Internal <code>WH.Types</code> IDs:</strong> The <code>https://wow.zamimg.com/widgets/power.js</code> script uses numerical identifiers for types. Some correspond directly to string names, while others require mapping (e.g., <code>PLAYER_CLASS</code> in <code>power.js</code> for the string identifier <code>class</code> that might be used in URLs or attributes). Refer to the <code>WH.Types</code> object in the script for a full list of numerical IDs and their string representations (if available).</p>
+
+            <h3 id="section4_2">4.2. Dependency Map (Entity Interrelation)</h3>
+            <p>Many core entities can often be extended by or linked to supplementary (optional) entities, adding new properties, functions, or connections to other game mechanics. Observations of Wowhead's data structure and tooltip usage practices allow for identifying the following common interrelations:</p>
+
+            <div class="accordion" id="accordionDependencies">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepNpc">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepNpc" aria-expanded="false" aria-controls="collapseDepNpc">
+                    <i class="fas fa-user me-2"></i><strong><code>npc</code> (Non-Player Character)</strong> + Dependencies
+                  </button>
+                </h2>
+                <div id="collapseDepNpc" class="accordion-collapse collapse" aria-labelledby="headingDepNpc" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>Can be associated with:</p>
+                    <ul>
+                      <li><code>event</code>: NPC may be part of a game event.</li>
+                      <li><code>title</code>: NPC may have a unique title.</li>
+                      <li><code>faction</code>: NPC belongs to a specific faction.</li>
+                      <li><code>achievement</code>: NPC may be a target or condition for an achievement.</li>
+                    </ul>
+                    <p><em>Description:</em> These links enrich NPC information, indicating their role in game events, allegiance, and significance in the context of achievements.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepObject">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepObject" aria-expanded="false" aria-controls="collapseDepObject">
+                    <i class="fas fa-cube me-2"></i><strong><code>object</code> (Game Object)</strong> + Dependencies
+                  </button>
+                </h2>
+                <div id="collapseDepObject" class="accordion-collapse collapse" aria-labelledby="headingDepObject" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>Can be associated with:</p>
+                    <ul>
+                      <li><code>event</code>: Object may only appear during specific events.</li>
+                      <li><code>quest</code>: Object may be required for a quest (interactive quest item).</li>
+                    </ul>
+                    <p><em>Description:</em> These links define the context of an object's appearance and use in the game world.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepItem">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepItem" aria-expanded="false" aria-controls="collapseDepItem">
+                     <i class="fas fa-shield-alt me-2"></i><strong><code>item</code></strong> + Dependencies
+                  </button>
+                </h2>
+                <div id="collapseDepItem" class="accordion-collapse collapse" aria-labelledby="headingDepItem" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>Can be associated with:</p>
+                    <ul>
+                      <li><code>item-set</code>: Item is part of a set.</li>
+                      <li><code>transmog-set</code>: Item may be part of a transmogrification set.</li>
+                      <li><code>outfit</code>: Item can be included in a saved outfit.</li>
+                      <li><code>currency</code>: Item might be purchasable with a specific currency or be a currency itself.</li>
+                      <li><code>achievement</code>: Item can be an achievement reward or condition.</li>
+                      <li><code>affix</code>: (Less common) Item might be related to the affix system (e.g., a reward).</li>
+                      <li><code>event</code>: Item may only be available during a game event.</li>
+                      <li>Also, for expansions like BfA: <code>azerite-essence</code>, <code>azerite-essence-power</code>.</li>
+                      <li>For professions: <code>profession-trait</code>.</li>
+                      <li>For battle pets: <code>battle-pet-ability</code> (if the item teaches an ability).</li>
+                      <li>For trading post: <code>trading-post-activity</code>.</li>
+                    </ul>
+                    <p><em>Description:</em> Items have numerous potential links, reflecting their role in gearing, collection, economy, and game events.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepQuest">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepQuest" aria-expanded="false" aria-controls="collapseDepQuest">
+                    <i class="fas fa-exclamation-circle me-2"></i><strong><code>quest</code></strong> + Dependencies
+                  </button>
+                </h2>
+                <div id="collapseDepQuest" class="accordion-collapse collapse" aria-labelledby="headingDepQuest" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>Can be associated with:</p>
+                    <ul>
+                      <li><code>event</code>: Quest may be part of a temporary game event.</li>
+                      <li><code>achievement</code>: Completing the quest may grant an achievement.</li>
+                      <li><code>storyline</code>: Quest is part of a larger storyline.</li>
+                    </ul>
+                    <p><em>Description:</em> These links place the quest within a broader game context.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepSpell">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepSpell" aria-expanded="false" aria-controls="collapseDepSpell">
+                    <i class="fas fa-magic me-2"></i><strong><code>spell</code></strong> + Dependencies
+                  </button>
+                </h2>
+                <div id="collapseDepSpell" class="accordion-collapse collapse" aria-labelledby="headingDepSpell" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>Can be associated with:</p>
+                    <ul>
+                      <li><code>achievement</code>: Using or learning a spell can be an achievement condition.</li>
+                      <li><code>event</code>: A special spell available only during an event.</li>
+                      <li><code>azerite-essence-power</code> (BfA): If the spell is an Azerite Essence power.</li>
+                      <li><code>profession-trait</code>: May be related to profession specializations.</li>
+                      <li><code>battle-pet-ability</code>: If it's a battle pet ability.</li>
+                    </ul>
+                    <p><em>Description:</em> Spell associations highlight their role in various game systems and events.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepZone">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepZone" aria-expanded="false" aria-controls="collapseDepZone">
+                    <i class="fas fa-map-marked-alt me-2"></i><strong><code>zone</code></strong> + Dependencies
+                  </button>
+                </h2>
+                <div id="collapseDepZone" class="accordion-collapse collapse" aria-labelledby="headingDepZone" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>Can be associated with:</p>
+                    <ul>
+                      <li><code>event</code>: Events occurring in a specific zone.</li>
+                      <li><code>achievement</code>: Achievements related to exploration or actions within a zone.</li>
+                      <li><code>storyline</code>: The zone is the setting for a particular storyline.</li>
+                      <li><code>trading-post-activity</code>: Trading Post activities may be tied to zones.</li>
+                    </ul>
+                    <p><em>Description:</em> Zone links define its significance in the game world and for various activities.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepFaction">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepFaction" aria-expanded="false" aria-controls="collapseDepFaction">
+                    <i class="fas fa-users me-2"></i><strong><code>faction</code></strong> + Dependencies
+                  </button>
+                </h2>
+                <div id="collapseDepFaction" class="accordion-collapse collapse" aria-labelledby="headingDepFaction" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>Can be associated with:</p>
+                    <ul>
+                      <li><code>event</code>: Events affecting reputation with the faction.</li>
+                      <li><code>achievement</code>: Achievements for reaching certain reputation levels.</li>
+                      <li><code>title</code>: Titles awarded for faction reputation.</li>
+                    </ul>
+                    <p><em>Description:</em> Faction links reflect the reputation system and its associated rewards.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepPlayerClass">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepPlayerClass" aria-expanded="false" aria-controls="collapseDepPlayerClass">
+                    <i class="fas fa-user-shield me-2"></i><strong><code>player-class</code></strong> + Dependencies
+                  </button>
+                </h2>
+                <div id="collapseDepPlayerClass" class="accordion-collapse collapse" aria-labelledby="headingDepPlayerClass" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>Can be associated with:</p>
+                    <ul>
+                      <li><code>profession-trait</code>: Profession features specific to or commonly used by the class.</li>
+                      <li><code>achievement</code>: Class-specific achievements.</li>
+                      <li><code>title</code>: Class-specific titles.</li>
+                    </ul>
+                    <p><em>Description:</em> Defines class-specific capabilities and rewards.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepRace">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepRace" aria-expanded="false" aria-controls="collapseDepRace">
+                    <i class="fas fa-user-tag me-2"></i><strong><code>race</code></strong> + Dependencies
+                  </button>
+                </h2>
+                <div id="collapseDepRace" class="accordion-collapse collapse" aria-labelledby="headingDepRace" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>Can be associated with:</p>
+                    <ul>
+                      <li><code>achievement</code>: Race-specific achievements.</li>
+                      <li><code>title</code>: Race-specific titles (if any).</li>
+                    </ul>
+                    <p><em>Description:</em> Defines race-specific rewards.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepSkill">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepSkill" aria-expanded="false" aria-controls="collapseDepSkill">
+                    <i class="fas fa-tools me-2"></i><strong><code>skill</code> (Profession/Skill)</strong> + Dependencies
+                  </button>
+                </h2>
+                <div id="collapseDepSkill" class="accordion-collapse collapse" aria-labelledby="headingDepSkill" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>Can be associated with:</p>
+                    <ul>
+                      <li><code>profession-trait</code>: Talents or specializations within professions.</li>
+                      <li><code>achievement</code>: Achievements related to leveling or using professions.</li>
+                    </ul>
+                    <p><em>Description:</em> Reflects the development and features of professions.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepAchievement">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepAchievement" aria-expanded="false" aria-controls="collapseDepAchievement">
+                    <i class="fas fa-trophy me-2"></i><strong><code>achievement</code></strong> + Dependencies
+                  </button>
+                </h2>
+                <div id="collapseDepAchievement" class="accordion-collapse collapse" aria-labelledby="headingDepAchievement" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>Can be associated with virtually all other core and many supplementary entities, as achievements often result from interactions with them:</p>
+                    <ul>
+                      <li><code>event</code>, <code>title</code>, <code>zone</code>, <code>quest</code>, <code>item</code>, <code>npc</code>, <code>faction</code>, <code>player-class</code>, <code>race</code>, <code>skill</code>.</li>
+                    </ul>
+                    <p><em>Description:</em> Achievements are inherently a meta-entity linking various aspects of the game.</p>
+                  </div>
+                </div>
+              </div>
+            </div> 
+            
+            <p class="mt-3">These dependencies reflect how different game elements intertwine to create a rich and multifaceted gaming experience, which Wowhead tooltips aim to represent.</p>
+          </section>
+
+          <section id="section5" class="section">
+            <h2><i class="fas fa-file-code me-2"></i>5. Working with XML Data from Wowhead</h2>
+            <p>Wowhead provides XML feeds for many entities, allowing developers to retrieve structured data for further processing, custom display, or integration with other systems. This method is an alternative or supplement to using the <code>https://wow.zamimg.com/widgets/power.js</code> script.</p>
+
+            <h3 id="section5_1">5.1. Environment Requirements for XML Parsing</h3>
+            <p>To successfully parse XML data from Wowhead on the server-side (e.g., using PHP), the following server environment is typically required:</p>
+            <ul class="list-group mb-3">
+              <li class="list-group-item"><strong>Hosting:</strong> Any standard web hosting with PHP support.</li>
+              <li class="list-group-item"><strong>PHP Version:</strong> PHP 7.4 or higher is recommended. Older versions (e.g., PHP 5.6, 7.0-7.3), while they might work, are outdated and may have different levels of support for XML extensions.</li>
+              <li class="list-group-item"><strong>PHP Extensions:</strong>
+                <ul>
+                  <li><code>libxml</code>: A fundamental library for XML manipulation in PHP. Usually enabled by default in most hosting environments.</li>
+                  <li><code>SimpleXML</code>: A user-friendly extension for parsing XML documents. Also typically enabled by default. You can check its availability using the PHP function <code>class_exists('SimpleXMLElement')</code>.</li>
+                  <li><code>cURL</code>: The preferred extension for making HTTP requests to external servers, like Wowhead, to fetch XML files. It offers flexible options for request configuration.</li>
+                  <li><code>allow_url_fopen</code>: If the <code>cURL</code> extension is not available or configured, the <code>allow_url_fopen</code> directive in the PHP configuration file (<code>php.ini</code>) must be set to <code>On</code>. This allows PHP functions like <code>file_get_contents()</code> to work with URLs for retrieving remote content. However, <code>cURL</code> is generally considered a more secure and versatile option.</li>
+                </ul>
+              </li>
+            </ul>
+
+            <h3 id="section5_2">5.2. Constructing URLs for XML Requests</h3>
+            <p>To obtain XML data for a specific entity, append the parameter <code>&xml=1</code> (or simply <code>&xml</code>) to the standard URL of that entity on the Wowhead site. The case of the <code>xml</code> parameter usually does not matter.</p>
+            
+            <h4>General URL Template for XML:</h4>
+            <pre><code class="language-http">https://{wowhead_domain}/{optional_language_path}/{optional_game_version_path}/{entity_type}={entity_id}&xml=1</code></pre>
+            
+            <h4>Example URLs for Fetching XML:</h4>
+            <ul class="list-unstyled">
+              <li><i class="fas fa-link me-1 text-primary"></i><strong>Item (Retail, Russian):</strong><br>
+                <code>https://www.wowhead.com/ru/item=19019&xml=1</code>
+              </li>
+              <li class="mt-2"><i class="fas fa-link me-1 text-primary"></i><strong>Item (Retail, German):</strong><br>
+                <code>https://www.wowhead.com/de/item=19019&xml=1</code>
+              </li>
+              <li class="mt-2"><i class="fas fa-link me-1 text-primary"></i><strong>Quest (Classic, English default):</strong><br>
+                <code>https://www.wowhead.com/classic/quest=1109&xml=1</code>
+              </li>
+              <li class="mt-2"><i class="fas fa-link me-1 text-primary"></i><strong>Quest (Classic, Russian):</strong><br>
+                <code>https://www.wowhead.com/classic/ru/quest=1109&xml=1</code>
+              </li>
+              <li class="mt-2"><i class="fas fa-link me-1 text-primary"></i><strong>Spell (Retail, Russian):</strong><br>
+                <code>https://www.wowhead.com/ru/spell=33786&xml=1</code>
+              </li>
+              <li class="mt-2"><i class="fas fa-link me-1 text-primary"></i><strong>Item with Additional Parameters (e.g., gems):</strong><br>
+                <code>https://www.wowhead.com/ru/item=25697&gems=23121&xml=1</code>
+                <br><small class="text-muted">(Parameters like <code>gems</code>, <code>ench</code>, <code>pcs</code>, etc., are added to the URL before the <code>&xml=1</code> parameter.)</small>
+              </li>
+            </ul>
+            <p>Complete URL lists for different game versions and languages can be constructed following this pattern by substituting the appropriate version and language segments.</p>
+
+            <h3 id="section5_3">5.3. Data Extractable from XML</h3>
+            <p>The XML feed from Wowhead can provide a wide range of information about the requested entity. The XML structure may vary slightly for different entity types, but the following key data can usually be expected:</p>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>XML Tag (Example)</th>
+                    <th>Description of Data</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>&lt;name&gt;...&lt;/name&gt;</code></td>
+                    <td>Official localized name of the entity. Often contains CDATA.</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;icon displayId="..."&gt;...&lt;/icon&gt;</code></td>
+                    <td>Icon filename (without extension, e.g., <code>inv_sword_67</code>) and sometimes its unique <code>displayId</code>.</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;link&gt;...&lt;/link&gt;</code></td>
+                    <td>A "pretty" URL (slug) to the entity's page on the Wowhead site, often including the name.</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;quality id="..."&gt;...&lt;/quality&gt;</code></td>
+                    <td>Item quality (e.g., "Epic", "Rare") and its numerical identifier.</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;class id="..."&gt;...&lt;/class&gt;</code></td>
+                    <td>Item class (e.g., "Weapon", "Armor").</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;subclass id="..."&gt;...&lt;/subclass&gt;</code></td>
+                    <td>Item subclass (e.g., "Swords", "Mail").</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;htmlTooltip&gt;...&lt;/htmlTooltip&gt;</code></td>
+                    <td>The full HTML code of the standard Wowhead tooltip. Can be useful for direct display if not using <code>https://wow.zamimg.com/widgets/power.js</code>. Often contains CDATA.</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;json&gt;...&lt;/json&gt;</code></td>
+                    <td>General data about the object in JSON format (within CDATA). Requires additional JSON parsing.</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;jsonEquip&gt;...&lt;/jsonEquip&gt;</code></td>
+                    <td>Equipment-specific data in JSON format (stats, armor/weapon type, requirements, etc., within CDATA).</td>
+                  </tr>
+                  <tr>
+                    <td>Various specific tags</td>
+                    <td>Depending on the entity type, tags with quest level, requirements, spell school for spells, rewards, etc., may be present.</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;error&gt;...&lt;/error&gt;</code></td>
+                    <td>If the requested object is not found or another error occurs on Wowhead's side, the XML may contain this tag with an error description.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="alert alert-info mt-3" role="alert">
+              <i class="fas fa-info-circle me-2"></i>To correctly parse data wrapped in CDATA (e.g., the content of <code>&lt;name&gt;</code> or <code>&lt;htmlTooltip&gt;</code>), appropriate methods of your XML parser should be used (e.g., casting to string in SimpleXML).
+            </div>
+          </section>
+
+          <section id="section6" class="section">
+            <h2><i class="fas fa-balance-scale me-2"></i>6. <code>https://wow.zamimg.com/widgets/power.js</code> vs. XML: Advantages and Limitations</h2>
+            <p>When working with Wowhead data, developers have two main ways to retrieve and display it: using the official JavaScript widget <code>power.js</code> or by directly parsing XML feeds. Each approach has its strengths and weaknesses.</p>
+
+            <div class="row mt-4">
+              <div class="col-md-12">
+                <h3 class="text-primary"><i class="fab fa-js-square me-2"></i><code>https://wow.zamimg.com/widgets/power.js</code></h3>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <h4><i class="fas fa-plus-circle text-success me-1"></i>Advantages:</h4>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>Ease of Integration:</strong> Simply include the script and define the global <code>whTooltips</code> object.</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>Automation:</strong> The script automatically finds links, generates tooltip HTML, adds icons, and applies quality colors.</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>Interactivity:</strong> Provides "live" tooltips with features like item level scaling, 3D model views, etc., within the tooltip itself.</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>Consistent Style:</strong> Ensures a consistent and recognizable Wowhead-style appearance for tooltips.</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>Data Freshness:</strong> Tooltip information is always up-to-date as it's loaded directly from Wowhead servers on display.</li>
+                </ul>
+              </div>
+              <div class="col-md-6 mb-3">
+                <h4><i class="fas fa-minus-circle text-danger me-1"></i>Limitations:</h4>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>Global Configuration:</strong> Settings in <code>whTooltips</code> (e.g., <code>iconSize</code>, <code>colorLinks</code>) apply to all tooltips on the page, making individual link behavior customization difficult without workarounds.</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>External Resource Dependency:</strong> Tooltip functionality is entirely dependent on the availability of <code>wow.zamimg.com</code> servers.</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>Less Data Control:</strong> Developers receive pre-formatted HTML tooltips; direct access to raw data for custom processing is limited.</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>Potential Conflicts:</strong> Incorrect implementation or conflicts with other JavaScript libraries on the page can interfere with its operation.</li>
+                </ul>
+              </div>
+            </div>
+
+            <hr class="my-5"> 
+
+            <div class="row mt-4">
+              <div class="col-md-12">
+                <h3 class="text-info"><i class="fas fa-file-excel me-2"></i>XML Feeds</h3>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <h4><i class="fas fa-plus-circle text-success me-1"></i>Advantages:</h4>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>Direct Data Access:</strong> Retrieve structured raw data (names, stats, descriptions, icon IDs, etc.) for custom use.</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>Full Display Control:</strong> Ability to create a completely custom design for tooltips or any other information presentation.</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>Local Caching:</strong> XML responses can be efficiently cached on your server, reducing dependency on Wowhead's availability and significantly speeding up data loading for users.</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>Offline Work (with cache):</strong> If data is cached, information can be available even during temporary connectivity issues with Wowhead.</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>Specific Detail Retrieval:</strong> XML might contain more details or attributes than are displayed in a standard tooltip.</li>
+                </ul>
+              </div>
+              <div class="col-md-6 mb-3">
+                <h4><i class="fas fa-minus-circle text-danger me-1"></i>Limitations:</h4>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>Implementation Complexity:</strong> Requires server-side logic (e.g., in PHP) to make HTTP requests, parse the XML structure, and then format the HTML.</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>No Built-in Interactivity:</strong> All interactivity similar to <code>power.js</code> tooltips must be implemented manually.</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>Parser Maintenance:</strong> Wowhead's XML feed structure could theoretically change, requiring updates to the parsing code.</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>Load on Wowhead Servers:</strong> Without proper and efficient caching, frequent requests to XML feeds can create excessive load on Wowhead's servers and potentially lead to access restrictions.</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>No Standard Icons/Styling "Out-of-the-Box":</strong> All visual presentation, including loading and displaying icons, is the developer's responsibility.</li>
+                </ul>
+              </div>
+            </div>
+            <p class="mt-4 alert alert-light">The choice between these two approaches (or a combination thereof) depends on the specific project requirements, desired level of customization, and available development resources.</p>
+          </section>
+
+          <section id="section7" class="section">
+            <h2><i class="fas fa-lightbulb me-2"></i>7. Useful Tips & Recommendations</h2>
+            <p>Below are some tips that can help when working with Wowhead Tooltips and debugging your projects.</p>
+            
+            <h4><i class="fas fa-bug me-1"></i>Debugging <code>https://wow.zamimg.com/widgets/power.js</code>:</h4>
+            <ul>
+              <li>Always check your browser's <strong>JavaScript console</strong> (usually opened with F12, "Console" tab) for errors. Any JavaScript errors on the page can interfere with the proper functioning of the tooltip script.</li>
+              <li>Ensure the global JavaScript object <code>whTooltips</code> is defined on the page <strong>before</strong> the <code>https://wow.zamimg.com/widgets/power.js</code> script is included. You can verify its existence and content by typing <code>whTooltips</code> into the browser console after the page loads.</li>
+              <li>Verify that the <code>https://wow.zamimg.com/widgets/power.js</code> script itself is successfully loaded by the browser (check the "Network" tab in developer tools). The response status should be <code>200 OK</code>.</li>
+              <li>If Wowhead links are not being processed (no icons or tooltips appear), ensure that the <code>&lt;a&gt;</code> HTML tags either have an <code>href</code> attribute pointing to the corresponding Wowhead page or contain a correctly formatted <code>data-wowhead="type=id&domain=language.version&..."</code> attribute.</li>
+            </ul>
+
+            <h4><i class="fas fa-cogs me-1"></i>Working with the <code>domain</code> Parameter:</h4>
+            <ul>
+              <li>Always use lowercase letters for <code>domain</code> parameter values (e.g., <code>ru.classic</code>, not <code>RU.Classic</code>).</li>
+              <li>For combined domains (language + game version), always use the format <code>language.version</code> (e.g., <code>ru.classic</code>, <code>de.wotlk</code>). The <code>version.language</code> format (e.g., <code>classic.ru</code>) is incorrect and may not work or may be processed unpredictably.</li>
+              <li>Remember that PTR and Beta versions usually only support English for tooltips, even if you specify a different language prefix in the <code>domain</code> parameter.</li>
+            </ul>
+
+            <h4><i class="fas fa-database me-1"></i>XML and Performance:</h4>
+            <ul>
+              <li><strong>Always cache XML responses!</strong> If you are using XML feeds to retrieve data server-side, it's crucial to implement a caching mechanism. In WordPress, the Transients API is excellent for this.
+                <ul>
+                  <li>Set a reasonable cache lifetime: e.g., 12-24 hours for relatively static data (item/spell names) and shorter (1-6 hours) for data that might change more frequently, or for 404 errors.</li>
+                </ul>
+              </li>
+              <li>Avoid making "live" XML requests to Wowhead for every link on a page with every page load. This will create a huge load and slow down your site. It's better to fetch data on the first access to an object and then store it in the cache.</li>
+            </ul>
+            
+            <h4><i class="fas fa-paint-brush me-1"></i>Customizing Appearance (when using <code>power.js</code>):</h4>
+            <ul>
+              <li>Although <code>https://wow.zamimg.com/widgets/power.js</code> styles the tooltips itself, you can override some of its CSS styles using more specific selectors or the <code>!important</code> directive in your theme's CSS. However, do this cautiously, as it might break the tooltip's layout or stop working after updates to the <code>power.js</code> script.</li>
+              <li>To change the appearance of the links themselves (text, color), use appropriate shortcode attributes (like <code>name</code>, <code>color</code>, <code>style</code> in the plugin discussed earlier) or directly modify the HTML attributes of the links, after ensuring that <code>renameLinks: false</code> and <code>colorLinks: false</code> are set in <code>whTooltips</code>.</li>
+            </ul>
+
+            <h4><i class="fas fa-lightbulb-on me-1"></i>"Tricks" and Advanced Aspects:</h4>
+            <ul>
+              <li><strong>Extended Parameters in <code>data-wowhead</code>:</strong> The <code>data-wowhead</code> attribute can contain not only basic <code>type=id&domain=language.version</code>, but also other parameters that <code>https://wow.zamimg.com/widgets/power.js</code> might consider for a more accurate tooltip display. For items, these can include:
+                <ul>
+                  <li><code>lvl=X</code> (character level for stat scaling)</li>
+                  <li><code>gems=ID1:ID2...</code> (inserted gems)</li>
+                  <li><code>ench=ID</code> (enchantment)</li>
+                  <li><code>pcs=ID1:ID2...</code> (set pieces for displaying set bonuses)</li>
+                  <li><code>bonus=ID1:ID2...</code> (bonus IDs for items with variants)</li>
+                </ul>
+                These parameters allow the script to display the tooltip as if the item is configured in a specific way.
+              </li>
+              <li><strong>Using Wowhead's Quality CSS Classes:</strong> If the <code>colorLinks: true</code> option is set (or not set and defaults to true), the <code>https://wow.zamimg.com/widgets/power.js</code> script adds CSS classes to links based on item quality (e.g., <code>q0</code>, <code>q1</code>, <code>q2</code>, <code>q3</code>, <code>q4</code>, <code>q5</code>, <code>q6</code>, <code>q7</code> for artifacts and legendaries). You can use these classes in your CSS for additional styling if Wowhead's default colors don't suit you, but you want to maintain color differentiation by quality.</li>
+              <li><strong>Checking Data Environment Activity:</strong> The <code>https://wow.zamimg.com/widgets/power.js</code> script has internal functions (e.g., <code>WH.isDataEnvActive(envId)</code>) that could theoretically be used to check if a particular data environment (like PTR, Beta) is active on Wowhead's side. This might be useful for dynamically displaying links or information on a site.</li>
+            </ul>
+             <div class="alert alert-warning mt-3" role="alert">
+              <i class="fas fa-exclamation-triangle me-2"></i>Please remember that internal functions and the structure of <code>https://wow.zamimg.com/widgets/power.js</code> can be changed by Wowhead without prior notice. Directly using undocumented internal functions is not recommended for production sites due to the fragility of such an approach.
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <footer class="pt-3 mt-4 text-muted border-top text-center">
+      &copy; Wowhead Tooltips Documentation Guide - May 2025
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.getElementById('sidebarMenu');
+      if (!sidebar) return; 
+
+      const sections = document.querySelectorAll('.section, .p-5.mb-4.bg-body-tertiary.rounded-3'); 
+      const navLinks = sidebar.querySelectorAll('.nav-link');
+      const navbarElement = document.querySelector('.navbar');
+      const navbarHeight = navbarElement ? navbarElement.offsetHeight : 56; 
+      
+      function activateLink() {
+        let current = '';
+        const scrollPosition = window.pageYOffset;
+
+        sections.forEach(section => {
+          if (section) { 
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            if (scrollPosition >= sectionTop - (navbarHeight + 45) && scrollPosition < sectionTop + sectionHeight - (navbarHeight + 45)) {
+              current = section.getAttribute('id');
+            }
+          }
+        });
+        
+        let anyLinkActive = false;
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          const href = link.getAttribute('href');
+          if (href && href.substring(1) === current) {
+            link.classList.add('active');
+            anyLinkActive = true;
+          }
+        });
+        
+        if (!anyLinkActive && navLinks.length > 0) {
+           if (sections.length > 0 && scrollPosition < sections[0].offsetTop - (navbarHeight + 45)) {
+                 navLinks[0].classList.add('active'); 
+            }
+        }
+      }
+      window.addEventListener('scroll', activateLink);
+      activateLink(); 
+    });
+  </script>
+</body>
+</html>
