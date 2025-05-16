@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+
+  <title>Wowhead Tooltips: 详细指南与常见问题解答</title>
+
+  <style>
+    body { 
+      padding-top: 20px; 
+      padding-bottom: 20px; 
+      font-family: 'Roboto', 'Noto Sans SC', sans-serif; 
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Roboto', 'Noto Sans SC', sans-serif; 
+      font-weight: 700; 
+      scroll-margin-top: 80px; 
+    }
+    .section { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+    .section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    h2 { margin-top: 40px; margin-bottom: 20px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+    h3 { margin-top: 30px; margin-bottom: 15px; }
+    h4 { margin-top: 25px; margin-bottom: 10px; font-size: 1.25rem; font-weight: 700; }
+    
+    code:not([class*="language-"]) { 
+      font-family: 'Roboto Mono', 'Noto Sans SC', monospace; 
+      background-color: #f8f9fa; 
+      padding: 0.2em 0.4em; 
+      margin: 0; 
+      font-size: 85%; 
+      border-radius: 3px; 
+      color: #d63384; 
+    }
+    pre { 
+      font-family: 'Roboto Mono', 'Noto Sans SC', monospace; 
+      background-color: #f8f9fa; 
+      border: 1px solid #dee2e6; 
+      border-radius: 0.25rem; 
+      padding: 1rem; 
+      white-space: pre-wrap; 
+      word-wrap: break-word; 
+      font-size: 0.875em; 
+    }
+    pre code { 
+      font-family: 'Roboto Mono', 'Noto Sans SC', monospace !important; 
+      background-color: transparent !important; 
+      padding: 0; margin: 0; 
+      font-size: inherit; 
+      border-radius: 0; 
+      color: inherit; 
+    }
+    table { margin-bottom: 1rem; }
+    .table th, .table td { vertical-align: middle; }
+    .navbar { margin-bottom: 30px; position: sticky; top: 0; z-index: 1030; }
+    #sidebarMenu { position: sticky; top: 80px; height: calc(100vh - 100px); overflow-y: auto; padding-top: 20px; z-index: 1020; }
+    .table-responsive { margin-top: 1rem; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+
+  <div class="container"> 
+    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded mb-4 shadow-sm">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <i class="fas fa-book-open me-2"></i>Wowhead Tooltips 常见问题
+        </a>
+      </div>
+    </nav>
+
+    <div class="row">
+      <div class="col-lg-4"> 
+        <nav id="sidebarMenu" class="d-none d-lg-block bg-light sidebar p-3 rounded"> 
+          <div class="position-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="#section1"> 
+                  <i class="fas fa-play-circle me-2"></i>1. 引言
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#section2">
+                  <i class="fas fa-cogs me-2"></i>2. 核心组件
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#section3">
+                  <i class="fas fa-brain me-2"></i>3. 理解 power.js 逻辑
+                </a>
+                <ul class="nav flex-column ms-3">
+                    <li class="nav-item"><a class="nav-link" href="#section3_1">3.1. 游戏环境</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#section3_2">3.2. 语言</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#section3_3">3.3. 匹配语言与版本</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#section4">
+                  <i class="fas fa-cubes me-2"></i>4. Wowhead 实体
+                </a>
+                 <ul class="nav flex-column ms-3">
+                    <li class="nav-item"><a class="nav-link" href="#section4_1">4.1. 分类</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#section4_2">4.2. 依赖关系图</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#section5">
+                  <i class="fas fa-file-code me-2"></i>5. 使用 XML 数据
+                </a>
+                <ul class="nav flex-column ms-3">
+                    <li class="nav-item"><a class="nav-link" href="#section5_1">5.1. 环境要求</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#section5_2">5.2. XML 请求 URL</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#section5_3">5.3. 从 XML 获取的数据</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#section6">
+                  <i class="fas fa-balance-scale me-2"></i>6. power.js vs. XML
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#section7">
+                  <i class="fas fa-lightbulb me-2"></i>7. 实用技巧与建议
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="col-lg-8"> 
+        <main>
+          <div class="p-5 mb-4 bg-body-tertiary rounded-3">
+            <div class="container-fluid py-5">
+              <h1 class="display-5 fw-bold" id="main-title"><i class="fas fa-book me-3"></i>Wowhead Tooltips</h1>
+              <p class="col-lg-10 fs-4"> 
+                关于使用 <code>power.js</code> 脚本 (<code>https://wow.zamimg.com/widgets/power.js</code>) 显示 Wowhead 浮动提示的详细指南与常见问题解答。
+              </p>
+            </div>
+          </div>
+
+          <section id="section1" class="section">
+            <h2><i class="fas fa-play-circle me-2"></i>1. 引言</h2>
+            <p>欢迎阅读 Wowhead Tooltips 完整指南，该工具由 <code>power.js</code> 小部件 (<code>https://wow.zamimg.com/widgets/power.js</code>) 提供支持。本文档旨在整合知识、阐明功能，并为使用或记录此强大工具的开发人员和 Wowhead 工作人员提供详细参考。</p>
+            <p><code>https://wow.zamimg.com/widgets/power.js</code> 脚本允许网站通过简单链接到 Wowhead 或使用特定数据属性来显示各种《魔兽世界》（及其他暴雪游戏）实体的丰富交互式浮动提示。本指南主要关注其在《魔兽世界》中的应用。</p>
+            <p>本文档综合了对 <code>https://wow.zamimg.com/widgets/power.js</code> 脚本本身的分析、观察到的 API 使用模式以及常见的集成实践信息。</p>
+          </section>
+
+          <section id="section2" class="section">
+            <h2><i class="fas fa-cogs me-2"></i>2. 核心组件: <code>power.js</code> 与 <code>whTooltips</code></h2>
+            <p>Wowhead Tooltips 的核心在于 <code>https://wow.zamimg.com/widgets/power.js</code> 脚本。为了在网页上初始化和配置其行为，必须在加载 <code>https://wow.zamimg.com/widgets/power.js</code> **之前**定义一个名为 <code>whTooltips</code> 的全局 JavaScript 对象 (历史上也曾使用 <code>wowhead_tooltips</code>)。</p>
+            
+            <h3>基本 HTML 设置示例:</h3>
+            <pre><code class="language-markup">&lt;script&gt;
+const whTooltips = {
+  colorLinks: true,  // 允许 Wowhead 对链接应用品质颜色
+  iconizeLinks: true, // 允许 Wowhead 在链接旁边添加图标
+  renameLinks: true,  // 允许 Wowhead 将链接文本重命名为官方实体名称
+  iconSize: 'tiny'   // 图标的默认大小 ('tiny', 'small', 'medium', 'large')
+};
+&lt;/script&gt;
+&lt;script src="https://wow.zamimg.com/widgets/power.js"&gt;&lt;/script&gt;</code></pre>
+            
+            <h4><code>whTooltips</code> 对象的关键参数:</h4>
+            <ul>
+              <li><code>colorLinks: true</code> — 允许 <code>https://wow.zamimg.com/widgets/power.js</code> 对链接应用标准的 Wowhead 品质颜色。</li>
+              <li><code>iconizeLinks: true</code> — 允许 <code>https://wow.zamimg.com/widgets/power.js</code> 自动在链接旁边添加图标。</li>
+              <li><code>renameLinks: true</code> — 允许 <code>https://wow.zamimg.com/widgets/power.js</code> 将链接文本更改为 Wowhead 数据库中的官方实体名称。</li>
+              <li><code>iconSize: 'tiny'</code> — 设置脚本添加的图标的默认大小。可用值: <code>'tiny'</code>, <code>'small'</code>, <code>'medium'</code>, <code>'large'</code>。</li>
+            </ul>
+            
+            <h3>关于 <code>whTooltips</code> 配置的重要说明:</h3>
+            <p><code>whTooltips</code> 对象是单个页面上所有浮动提示的**全局配置**。<code>https://wow.zamimg.com/widgets/power.js</code> 脚本在初始化时读取此对象一次。这意味着诸如 <code>iconSize</code>, <code>colorLinks</code>, 和 <code>renameLinks</code> 之类的设置将普遍适用于该页面上由此 <code>https://wow.zamimg.com/widgets/power.js</code> 实例呈现的所有 Wowhead 浮动提示。无法通过 <code>whTooltips</code> 为每个单独的链接进行这些参数的个性化定制。相反，要更改单个链接的外观（例如文本或颜色），插件或自定义脚本应在 <code>https://wow.zamimg.com/widgets/power.js</code> 处理之前或之后直接修改这些链接的 HTML 属性，并预先在 <code>whTooltips</code> 中设置相应的全局标志（例如 <code>colorLinks: false</code>, <code>renameLinks: false</code>），以防止 <code>https://wow.zamimg.com/widgets/power.js</code> 覆盖这些更改。</p>
+          </section>
+
+          <section id="section3" class="section">
+            <h2><i class="fas fa-brain me-2"></i>3. 理解 <code>power.js</code> 逻辑</h2>
+            <p>为了有效地使用 <code>https://wow.zamimg.com/widgets/power.js</code>, 理解它如何处理不同的游戏版本、语言和数据类型非常重要。</p>
+
+            <h3 id="section3_1">3.1. 游戏环境 (Data Environments) 与版本</h3>
+            <p><code>https://wow.zamimg.com/widgets/power.js</code> 脚本通过“数据环境” (data environments) 和“数据树” (data trees) 系统内部管理不同游戏及其状态（正式服、PTR、beta、怀旧服等）的数据。</p>
+            
+            <h4><code>power.js</code> 中的内部标识符:</h4>
+            <p>对 <code>https://wow.zamimg.com/widgets/power.js</code> 脚本的分析显示使用了以下内部常量:</p>
+            <ul>
+              <li><code>WH.dataEnv</code>: 定义特定的游戏版本和状态 (例如, <code>MAIN: 1</code> 代表正式服 Live, <code>CLASSIC: 4</code> 代表经典怀旧服 Era, <code>WRATH: 8</code> 代表巫妖王之怒怀旧服等)。</li>
+              <li><code>WH.dataEnvKey</code>: 将数字 ID 映射到文本键 (例如, <code>1:"live"</code>, <code>4:"classic"</code>, <code>8:"wrath"</code>)。</li>
+              <li><code>WH.dataTree</code>: 将环境分组到更广泛的类别中 (例如, <code>RETAIL: 1</code>, <code>CLASSIC: 4</code>)。</li>
+            </ul>
+
+            <h4>映射到 <code>domain</code> 参数:</h4>
+            <p>链接或 <code>data-wowhead</code> 属性中的 <code>domain</code> 参数用于告知 <code>https://wow.zamimg.com/widgets/power.js</code> 显示哪个游戏版本和语言。此参数对于正确的本地化和特定版本提示至关重要。下表列出了常见的 <code>domain</code> 值及其推测的对应关系。</p>
+            
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered caption-top">
+                <caption><i class="fas fa-globe-americas me-1"></i>表 1: <code>domain</code> 参数与 Wowhead 版本的映射</caption>
+                <thead class="table-dark">
+                  <tr>
+                    <th><code>domain</code> (用户输入)</th>
+                    <th>对应的 Wowhead 站点 (示例)</th>
+                    <th>内部 <code>power.js</code> 键 (推测)</th>
+                    <th><code>WH.dataEnv</code> (推测)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>(空或 <code>en</code>)</td><td><code>www.wowhead.com/</code></td><td><code>live</code></td><td><code>MAIN</code> (1)</td></tr>
+                  <tr><td><code>ru</code></td><td><code>www.wowhead.com/ru/</code></td><td><code>ru</code> (使用 <code>live</code>)</td><td><code>MAIN</code> (1)</td></tr>
+                  <tr><td><code>de</code></td><td><code>www.wowhead.com/de/</code></td><td><code>de</code> (使用 <code>live</code>)</td><td><code>MAIN</code> (1)</td></tr>
+                  <tr><td><code>cn</code></td><td><code>www.wowhead.com/cn/</code></td><td><code>cn</code> (使用 <code>live</code>)</td><td><code>MAIN</code> (1)</td></tr>
+                  <tr><td><code>classic</code></td><td><code>www.wowhead.com/classic/</code></td><td><code>classic</code></td><td><code>CLASSIC</code> (4)</td></tr>
+                  <tr><td><code>cn.classic</code></td><td><code>www.wowhead.com/classic/cn/</code></td><td><code>cn.classic</code></td><td><code>CLASSIC</code> (4)</td></tr>
+                  <tr><td><code>tbc</code></td><td><code>www.wowhead.com/tbc/</code></td><td><code>tbc</code></td><td><code>TBC</code> (5)</td></tr>
+                  <tr><td><code>es.tbc</code></td><td><code>www.wowhead.com/tbc/es/</code></td><td><code>es.tbc</code></td><td><code>TBC</code> (5)</td></tr>
+                  <tr><td><code>wotlk</code></td><td><code>www.wowhead.com/wotlk/</code></td><td><code>wotlk</code> (对应 <code>wrath</code>)</td><td><code>WRATH</code> (8)</td></tr>
+                  <tr><td><code>fr.wotlk</code></td><td><code>www.wowhead.com/wotlk/fr/</code></td><td><code>fr.wotlk</code></td><td><code>WRATH</code> (8)</td></tr>
+                  <tr><td><code>cata</code></td><td><code>www.wowhead.com/cata/</code></td><td><code>cata</code></td><td><code>CATA</code> (11)</td></tr>
+                  <tr><td><code>ko.cata</code></td><td><code>www.wowhead.com/cata/ko/</code></td><td><code>ko.cata</code></td><td><code>CATA</code> (11)</td></tr>
+                  <tr><td><code>mop-classic</code></td><td><code>www.wowhead.com/mop-classic/</code></td><td><code>mop-classic</code> (对应 <code>mists</code>)</td><td><code>MISTS</code> (15)</td></tr>
+                  <tr><td><code>ptr</code></td><td><code>www.wowhead.com/ptr/</code></td><td><code>ptr</code></td><td><code>PTR</code> (2)</td></tr>
+                  <tr><td><code>beta</code></td><td><code>www.wowhead.com/beta/</code></td><td><code>beta</code></td><td><code>BETA</code> (3)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="mt-2"><strong>注意:</strong> <code>https://wow.zamimg.com/widgets/power.js</code> 使用内部函数 (例如, <code>WH.getLocaleFromDomain.L</code>, <code>WH.getDataEnvFromKey</code>) 将这些字符串表示映射到数字标识符。</p>
+
+            <h4>PTR 和 Beta 版本:</h4>
+            <ul>
+              <li>PTR (Public Test Realm / 公共测试服): URL <code>https://www.wowhead.com/ptr/</code>, 参数 <code>domain=ptr</code>.</li>
+              <li>Beta (测试版): URL <code>https://www.wowhead.com/beta/</code>, 参数 <code>domain=beta</code>.</li>
+            </ul>
+            <p>这些版本通常仅提供英文的浮动提示。</p>
+
+            <h3 id="section3_2">3.2. 语言</h3>
+            <p><code>https://wow.zamimg.com/widgets/power.js</code> 支持多种语言的提示本地化。可在 <code>domain</code> 参数中使用的主要语言域包括：</p>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="col"><div class="p-2 border bg-light rounded"><code>en</code> - 英语 (通常为默认)</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>ru</code> - 俄语</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>de</code> - 德语</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>es</code> - 西班牙语</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>fr</code> - 法语</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>it</code> - 意大利语</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>pt</code> - 葡萄牙语 (通常为巴西葡萄牙语 PT-BR)</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>ko</code> - 韩语</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>cn</code> - 简体中文</div></div>
+                <div class="col"><div class="p-2 border bg-light rounded"><code>tw</code> - 繁體中文</div></div>
+            </div>
+            <p class="mt-3">在内部, <code>https://wow.zamimg.com/widgets/power.js</code> 将这些语言代码映射到数字区域设置 ID (例如, 通过 <code>WH.getLocaleFromDomain.L</code> 对象, 其中 <code>cn:4</code>, <code>tw:10</code>, <code>ko:1</code> 等)。</p>
+
+            <h3 id="section3_3">3.3. 匹配语言和游戏版本</h3>
+            <p>为了在特定语言中正确显示特定游戏版本的提示，使用组合的 <code>domain</code> 参数。</p>
+            <ul>
+              <li><strong>格式 <code>语言.版本</code>:</strong> 这是首选且最正确的格式。示例: <code>cn.classic</code>, <code>tw.wotlk</code>, <code>ko.cata</code>。<code>https://wow.zamimg.com/widgets/power.js</code> 脚本会解析此类域，将指定的语言区域设置应用于相应游戏版本的数据。</li>
+              <li><strong>格式 <code>版本.语言</code> (不推荐):</strong> 尽管某些系统可能会尝试自动更正此格式 (例如, <code>classic.cn</code> 改为 <code>cn.classic</code>), 但为确保可靠性，应始终使用 <code>语言.版本</code> 格式。</li>
+              <li><strong>仅版本 (例如, <code>domain=classic</code>, <code>domain=wotlk</code>):</strong> 在这种情况下, <code>https://wow.zamimg.com/widgets/power.js</code> 将使用指定游戏版本的数据。此类版本的默认语言通常是英语，除非特定实现逻辑 (例如插件) 另有规定。</li>
+              <li><strong>仅语言 (例如, <code>domain=cn</code>, <code>domain=de</code>):</strong> 这意味着使用指定语言的正式服版本。</li>
+            </ul>
+          </section>
+          
+          <section id="section4" class="section">
+            <h2><i class="fas fa-cubes me-2"></i>4. Wowhead 实体 (数据类型)</h2>
+            <p>Wowhead 处理多种不同类型的游戏数据，称为“实体”。<code>https://wow.zamimg.com/widgets/power.js</code> 脚本使用内部的数字标识符系统来表示这些类型，这些标识符定义在 <code>WH.Types</code> 对象中。为了更好地理解，这些实体可以根据其作用和普遍性进行概念性分组。</p>
+
+            <h3 id="section4_1">4.1. 实体分类</h3>
+            <p>以下是根据实体典型用途和重要性进行的分类尝试。</p>
+
+            <h4><i class="fas fa-star me-1"></i>类别 1: 核心 (强制性) 实体</h4>
+            <p>这些是显示《魔兽世界》关键游戏信息所必需的基本类型。它们被广泛使用，并且通常是请求浮动提示的对象。</p>
+            <ul class="list-group mb-3">
+              <li class="list-group-item"><strong><code>item</code> (物品)</strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.ITEM: 3</span><br>装备、消耗品、材料等。</li>
+              <li class="list-group-item"><strong><code>spell</code> (法术)</strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.SPELL: 6</span><br>玩家/NPC 技能、物品效果。</li>
+              <li class="list-group-item"><strong><code>quest</code> (任务)</strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.QUEST: 5</span><br>游戏内任务。</li>
+              <li class="list-group-item"><strong><code>npc</code> (非玩家角色)</strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.NPC: 1</span><br>任何计算机控制的角色。</li>
+              <li class="list-group-item"><strong><code>zone</code> (区域)</strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.ZONE: 7</span><br>地点、地下城、团队副本、城市。</li>
+              <li class="list-group-item"><strong><code>achievement</code> (成就)</strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.ACHIEVEMENT: 10</span><br>游戏内成就。</li>
+              <li class="list-group-item"><strong><code>object</code> (游戏对象)</strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.OBJECT: 2</span><br>可交互的世界对象 (宝箱、矿点、草药等)。</li>
+              <li class="list-group-item"><strong><code>faction</code> (阵营)</strong> <span class="badge bg-primary rounded-pill float-end">WH.Types.FACTION: 8</span><br>游戏内阵营及其声望。</li>
+              <li class="list-group-item"><strong><code>player-class</code> (玩家职业)</strong> (字符串 ID: <code>class</code>) <span class="badge bg-primary rounded-pill float-end">WH.Types.PLAYER_CLASS: 13</span><br>可玩职业 (战士、法师等)。</li>
+              <li class="list-group-item"><strong><code>race</code> (玩家种族)</strong> (字符串 ID: <code>race</code>) <span class="badge bg-primary rounded-pill float-end">WH.Types.RACE: 14</span><br>可玩种族 (人类、兽人等)。</li>
+              <li class="list-group-item"><strong><code>skill</code> (技能/专业)</strong> (字符串 ID: <code>skill</code>) <span class="badge bg-primary rounded-pill float-end">WH.Types.SKILL: 15</span><br>主要和次要专业、武器技能。</li>
+            </ul>
+
+            <h4><i class="fas fa-puzzle-piece me-1"></i>类别 2: 补充 (可选) 实体</h4>
+            <p>这些类型通常扩展或补充核心实体，或与特定的游戏系统和机制 (例如特定资料片) 相关。它们可能并非总是可用或相关。</p>
+            <ul class="list-group mb-3">
+              <li class="list-group-item"><strong><code>item-set</code> (物品套装)</strong> <span class="badge bg-info rounded-pill float-end">WH.Types.ITEM_SET: 4</span><br>具有套装奖励的装备套装。</li>
+              <li class="list-group-item"><strong><code>title</code> (头衔)</strong> <span class="badge bg-info rounded-pill float-end">WH.Types.TITLE: 11</span><br>角色头衔。</li>
+              <li class="list-group-item"><strong><code>event</code> (游戏事件)</strong> <span class="badge bg-info rounded-pill float-end">WH.Types.EVENT: 12</span><br>游戏内节日、季节性和世界事件。</li>
+              <li class="list-group-item"><strong><code>currency</code> (货币)</strong> <span class="badge bg-info rounded-pill float-end">WH.Types.CURRENCY: 17</span><br>各种游戏内货币 (荣誉点数、勇气点数、特定事件代币)。</li>
+              <li class="list-group-item"><strong><code>affix</code> (词缀)</strong> <span class="badge bg-info rounded-pill float-end">WH.Types.AFFIX: 40</span><br>史诗钥石地下城 модификаторы.</li>
+              <li class="list-group-item"><strong><code>transmog-set</code> (幻化套装)</strong> <span class="badge bg-info rounded-pill float-end">WH.Types.TRANSMOG_SET: 101</span><br>用于幻化的预定义外观套装。</li>
+              <li class="list-group-item"><strong><code>outfit</code> (外观方案)</strong> <span class="badge bg-info rounded-pill float-end">WH.Types.OUTFIT: 110</span><br>用户保存的用于快速更换的装备套装。</li>
+              <li class="list-group-item"><strong><code>hunter-pet</code> (猎人宠物)</strong> <span class="badge bg-info rounded-pill float-end">WH.Types.HUNTER_PET: 9</span><br>猎人职业宠物及其技能信息。</li>
+              <li class="list-group-item"><strong><code>guide</code> (指南)</strong> <span class="badge bg-info rounded-pill float-end">WH.Types.GUIDE: 100</span><br>Wowhead 网站上的指南文章。</li>
+              <li class="list-group-item"><strong><code>icon</code> (图标)</strong> <span class="badge bg-info rounded-pill float-end">WH.Types.ICON: 29</span><br>单个游戏图标 (很少用于直接提示，更多是作为其他实体的一部分)。</li>
+              <li class="list-group-item"><strong><code>sound</code> (声音)</strong> <span class="badge bg-info rounded-pill float-end">WH.Types.SOUND: 19</span><br>游戏内声音文件。</li>
+              <li class="list-group-item">... 以及许多其他更具体的类型，例如 <code>building</code> (建筑), <code>follower</code> (追随者), <code>mission</code> (任务), <code>azerite-essence</code> (艾泽里特精华), <code>azerite-essence-power</code> (艾泽里特精华之力), <code>storyline</code> (故事线), <code>profession-trait</code> (专业特长), <code>battle-pet-ability</code> (战斗宠物技能), <code>trading-post-activity</code> (贸易站活动)。完整列表请参阅 <code>https://wow.zamimg.com/widgets/power.js</code> 脚本中的 <code>WH.Types</code> 对象。</li>
+            </ul>
+
+            <h4><i class="fas fa-link me-1"></i>类别 3: 独立系统实体</h4>
+            <p>这些类型通常定义基本的游戏条件或系统元素，并且可以独立存在。有些可能与核心实体重叠，因为它们是基础性的，但它们的上下文可能更通用。</p>
+            <ul class="list-group mb-3">
+              <li class="list-group-item"><strong><code>resource</code> (资源)</strong> <span class="badge bg-secondary rounded-pill float-end">WH.Types.RESOURCE: 27</span><br>例如，要塞或职业大厅资源。</li>
+              <li class="list-group-item"><strong><code>race</code> (种族)</strong> <span class="badge bg-secondary rounded-pill float-end">WH.Types.RACE: 14</span><br>作为定义可用种族的通用概念 (也属于核心实体)。</li>
+              <li class="list-group-item"><strong><code>player-class</code> (职业)</strong> <span class="badge bg-secondary rounded-pill float-end">WH.Types.PLAYER_CLASS: 13</span><br>作为定义可用职业的通用概念 (也属于核心实体)。</li>
+              <li class="list-group-item"><strong><code>zone</code> (区域)</strong> <span class="badge bg-secondary rounded-pill float-end">WH.Types.ZONE: 7</span><br>作为领土的通用概念 (也属于核心实体)。</li>
+              <li class="list-group-item"><strong><code>faction</code> (阵营)</strong> <span class="badge bg-secondary rounded-pill float-end">WH.Types.FACTION: 8</span><br>作为归属的通用概念 (也属于核心实体)。</li>
+            </ul>
+            <p class="mt-2"><strong>关于内部 <code>WH.Types</code> ID 的说明:</strong> <code>https://wow.zamimg.com/widgets/power.js</code> 脚本使用数字标识符来表示类型。有些直接对应字符串名称，而另一些则需要映射 (例如, <code>power.js</code> 中的 <code>PLAYER_CLASS</code> 对应于可能在 URL 或属性中使用的字符串标识符 <code>class</code>)。有关数字 ID 及其字符串表示 (如果可用) 的完整列表，请参阅脚本中的 <code>WH.Types</code> 对象。</p>
+
+            <h3 id="section4_2">4.2. 依赖关系图 (实体相互关系)</h3>
+            <p>许多核心实体通常可以被补充 (可选) 实体扩展或链接，从而为其添加新的属性、功能或与其他游戏机制的连接。对 Wowhead 数据结构和提示使用实践的观察揭示了以下常见的相互关系：</p>
+
+            <div class="accordion" id="accordionDependencies">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepNpc">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepNpc" aria-expanded="false" aria-controls="collapseDepNpc">
+                    <i class="fas fa-user me-2"></i><strong><code>npc</code> (非玩家角色)</strong> + 依赖关系
+                  </button>
+                </h2>
+                <div id="collapseDepNpc" class="accordion-collapse collapse" aria-labelledby="headingDepNpc" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>可关联:</p>
+                    <ul>
+                      <li><code>event</code>: NPC 可能是游戏事件的一部分。</li>
+                      <li><code>title</code>: NPC 可能拥有独特的头衔。</li>
+                      <li><code>faction</code>: NPC 属于特定阵营。</li>
+                      <li><code>achievement</code>: NPC 可能是成就的目标或条件。</li>
+                    </ul>
+                    <p><em>描述:</em> 这些链接丰富了 NPC 信息，指出了其在游戏事件、归属和成就背景下的作用和重要性。</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepObject">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepObject" aria-expanded="false" aria-controls="collapseDepObject">
+                    <i class="fas fa-cube me-2"></i><strong><code>object</code> (游戏对象)</strong> + 依赖关系
+                  </button>
+                </h2>
+                <div id="collapseDepObject" class="accordion-collapse collapse" aria-labelledby="headingDepObject" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>可关联:</p>
+                    <ul>
+                      <li><code>event</code>: 对象可能仅在特定事件期间出现。</li>
+                      <li><code>quest</code>: 对象可能对完成任务是必需的 (可交互的任务物品)。</li>
+                    </ul>
+                    <p><em>描述:</em> 这些链接定义了对象在游戏世界中出现和使用的背景。</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepItem">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepItem" aria-expanded="false" aria-controls="collapseDepItem">
+                     <i class="fas fa-shield-alt me-2"></i><strong><code>item</code> (物品)</strong> + 依赖关系
+                  </button>
+                </h2>
+                <div id="collapseDepItem" class="accordion-collapse collapse" aria-labelledby="headingDepItem" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>可关联:</p>
+                    <ul>
+                      <li><code>item-set</code>: 物品是套装的一部分。</li>
+                      <li><code>transmog-set</code>: 物品可能是幻化套装的一部分。</li>
+                      <li><code>outfit</code>: 物品可以包含在已保存的外观方案中。</li>
+                      <li><code>currency</code>: 物品可以用特定货币购买，或者本身就是一种货币。</li>
+                      <li><code>achievement</code>: 物品可以是成就奖励或条件。</li>
+                      <li><code>affix</code>: (较少见) 物品可能与词缀系统相关 (例如奖励)。</li>
+                      <li><code>event</code>: 物品可能仅在游戏事件期间可用。</li>
+                      <li>此外，对于像 BfA 这样的资料片: <code>azerite-essence</code>, <code>azerite-essence-power</code>。</li>
+                      <li>对于专业: <code>profession-trait</code>。</li>
+                      <li>对于战斗宠物: <code>battle-pet-ability</code> (如果物品教授技能)。</li>
+                      <li>对于贸易站: <code>trading-post-activity</code>。</li>
+                    </ul>
+                    <p><em>描述:</em> 物品具有许多潜在的链接，反映了它们在装备、收集、经济和游戏事件中的作用。</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepQuest">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepQuest" aria-expanded="false" aria-controls="collapseDepQuest">
+                    <i class="fas fa-exclamation-circle me-2"></i><strong><code>quest</code> (任务)</strong> + 依赖关系
+                  </button>
+                </h2>
+                <div id="collapseDepQuest" class="accordion-collapse collapse" aria-labelledby="headingDepQuest" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>可关联:</p>
+                    <ul>
+                      <li><code>event</code>: 任务可能是临时游戏事件的一部分。</li>
+                      <li><code>achievement</code>: 完成任务可能会获得成就。</li>
+                      <li><code>storyline</code>: 任务是更宏大故事情节的一部分。</li>
+                    </ul>
+                    <p><em>描述:</em> 这些链接将任务置于更广泛的游戏背景中。</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepSpell">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepSpell" aria-expanded="false" aria-controls="collapseDepSpell">
+                    <i class="fas fa-magic me-2"></i><strong><code>spell</code> (法术)</strong> + 依赖关系
+                  </button>
+                </h2>
+                <div id="collapseDepSpell" class="accordion-collapse collapse" aria-labelledby="headingDepSpell" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>可关联:</p>
+                    <ul>
+                      <li><code>achievement</code>: 使用或学习法术可能是成就的条件。</li>
+                      <li><code>event</code>: 仅在事件期间可用的特殊法术。</li>
+                      <li><code>azerite-essence-power</code> (BfA): 如果法术是艾泽里特精华之力。</li>
+                      <li><code>profession-trait</code>: 可能与专业特长相关。</li>
+                      <li><code>battle-pet-ability</code>: 如果是战斗宠物技能。</li>
+                    </ul>
+                    <p><em>描述:</em> 法术的关联性突出了它们在各种游戏系统和事件中的作用。</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepZone">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepZone" aria-expanded="false" aria-controls="collapseDepZone">
+                    <i class="fas fa-map-marked-alt me-2"></i><strong><code>zone</code> (区域)</strong> + 依赖关系
+                  </button>
+                </h2>
+                <div id="collapseDepZone" class="accordion-collapse collapse" aria-labelledby="headingDepZone" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>可关联:</p>
+                    <ul>
+                      <li><code>event</code>: 在特定区域发生的事件。</li>
+                      <li><code>achievement</code>: 与区域探索或行动相关的成就。</li>
+                      <li><code>storyline</code>: 该区域是特定故事情节的发生地。</li>
+                      <li><code>trading-post-activity</code>: 贸易站活动可能与区域相关联。</li>
+                    </ul>
+                    <p><em>描述:</em> 区域链接定义了其在游戏世界中以及对于各种活动的重要性。</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepFaction">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepFaction" aria-expanded="false" aria-controls="collapseDepFaction">
+                    <i class="fas fa-users me-2"></i><strong><code>faction</code> (阵营)</strong> + 依赖关系
+                  </button>
+                </h2>
+                <div id="collapseDepFaction" class="accordion-collapse collapse" aria-labelledby="headingDepFaction" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>可关联:</p>
+                    <ul>
+                      <li><code>event</code>: 影响阵营声望的事件。</li>
+                      <li><code>achievement</code>: 达到特定声望等级的成就。</li>
+                      <li><code>title</code>: 因阵营声望而获得的头衔。</li>
+                    </ul>
+                    <p><em>描述:</em> 阵营链接反映了声望系统及其相关奖励。</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepPlayerClass">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepPlayerClass" aria-expanded="false" aria-controls="collapseDepPlayerClass">
+                    <i class="fas fa-user-shield me-2"></i><strong><code>player-class</code> (玩家职业)</strong> + 依赖关系
+                  </button>
+                </h2>
+                <div id="collapseDepPlayerClass" class="accordion-collapse collapse" aria-labelledby="headingDepPlayerClass" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>可关联:</p>
+                    <ul>
+                      <li><code>profession-trait</code>: 特定于职业或职业常用专业特长。</li>
+                      <li><code>achievement</code>: 职业特定成就。</li>
+                      <li><code>title</code>: 职业特定头衔。</li>
+                    </ul>
+                    <p><em>描述:</em> 定义职业特定的能力和奖励。</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepRace">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepRace" aria-expanded="false" aria-controls="collapseDepRace">
+                    <i class="fas fa-user-tag me-2"></i><strong><code>race</code> (玩家种族)</strong> + 依赖关系
+                  </button>
+                </h2>
+                <div id="collapseDepRace" class="accordion-collapse collapse" aria-labelledby="headingDepRace" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>可关联:</p>
+                    <ul>
+                      <li><code>achievement</code>: 种族特定成就。</li>
+                      <li><code>title</code>: 种族特定头衔 (如果有)。</li>
+                    </ul>
+                    <p><em>描述:</em> 定义种族特定的奖励。</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepSkill">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepSkill" aria-expanded="false" aria-controls="collapseDepSkill">
+                    <i class="fas fa-tools me-2"></i><strong><code>skill</code> (专业/技能)</strong> + 依赖关系
+                  </button>
+                </h2>
+                <div id="collapseDepSkill" class="accordion-collapse collapse" aria-labelledby="headingDepSkill" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>可关联:</p>
+                    <ul>
+                      <li><code>profession-trait</code>: 专业内的天赋或专精。</li>
+                      <li><code>achievement</code>: 与升级或使用专业相关的成就。</li>
+                    </ul>
+                    <p><em>描述:</em> 反映专业的发展和特点。</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingDepAchievement">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepAchievement" aria-expanded="false" aria-controls="collapseDepAchievement">
+                    <i class="fas fa-trophy me-2"></i><strong><code>achievement</code> (成就)</strong> + 依赖关系
+                  </button>
+                </h2>
+                <div id="collapseDepAchievement" class="accordion-collapse collapse" aria-labelledby="headingDepAchievement" data-bs-parent="#accordionDependencies">
+                  <div class="accordion-body">
+                    <p>几乎可以与所有其他核心实体和许多补充实体相关联，因为成就通常是与它们互动的结果:</p>
+                    <ul>
+                      <li><code>event</code>, <code>title</code>, <code>zone</code>, <code>quest</code>, <code>item</code>, <code>npc</code>, <code>faction</code>, <code>player-class</code>, <code>race</code>, <code>skill</code>.</li>
+                    </ul>
+                    <p><em>描述:</em> 成就本质上是一种元实体，连接着游戏的各个方面。</p>
+                  </div>
+                </div>
+              </div>
+            </div> 
+            
+            <p class="mt-3">这些依赖关系反映了不同游戏元素如何交织在一起，创造出丰富多样的游戏体验，而 Wowhead 浮动提示正是试图呈现这种体验。</p>
+          </section>
+
+          <section id="section5" class="section">
+            <h2><i class="fas fa-file-code me-2"></i>5. 使用 Wowhead 的 XML 数据</h2>
+            <p>Wowhead 为许多实体提供 XML Feed，允许开发人员检索结构化数据以进行进一步处理、自定义显示或与其他系统集成。此方法是使用 <code>https://wow.zamimg.com/widgets/power.js</code> 脚本的替代或补充。</p>
+
+            <h3 id="section5_1">5.1. XML 解析的环境要求</h3>
+            <p>要在服务器端成功解析来自 Wowhead 的 XML 数据 (例如使用 PHP), 通常需要以下服务器环境:</p>
+            <ul class="list-group mb-3">
+              <li class="list-group-item"><strong>主机:</strong> 任何支持 PHP 的标准虚拟主机。</li>
+              <li class="list-group-item"><strong>PHP 版本:</strong> 推荐 PHP 7.4 或更高版本。较早版本 (例如 PHP 5.6, 7.0-7.3) 虽然可能工作，但已过时，并且对 XML 扩展的支持可能有所不同。</li>
+              <li class="list-group-item"><strong>PHP 扩展:</strong>
+                <ul>
+                  <li><code>libxml</code>: PHP 中用于 XML 操作的基础库。通常在大多数托管环境中默认启用。</li>
+                  <li><code>SimpleXML</code>: 用于解析 XML 文档的用户友好扩展。通常也默认启用。您可以使用 PHP 函数 <code>class_exists('SimpleXMLElement')</code> 来检查其可用性。</li>
+                  <li><code>cURL</code>: 用于向外部服务器 (如 Wowhead) 发出 HTTP 请求以获取 XML 文件的首选扩展。它为请求配置提供了灵活的选项。</li>
+                  <li><code>allow_url_fopen</code>: 如果 <code>cURL</code> 扩展不可用或未配置，则 PHP 配置文件 (<code>php.ini</code>) 中的 <code>allow_url_fopen</code> 指令必须设置为 <code>On</code>。这允许诸如 <code>file_get_contents()</code> 之类的 PHP 函数使用 URL 来检索远程内容。但是，<code>cURL</code>通常被认为是更安全、更灵活的选择。</li>
+                </ul>
+              </li>
+            </ul>
+
+            <h3 id="section5_2">5.2. 构建 XML 请求的 URL</h3>
+            <p>要获取特定实体的 XML 数据，请将参数 <code>&xml=1</code> (或简单地 <code>&xml</code>) 附加到 Wowhead 网站上该实体的标准 URL。<code>xml</code> 参数的大小写通常无关紧要。</p>
+            
+            <h4>XML 的通用 URL 模板:</h4>
+            <pre><code class="language-http">https://{wowhead_domain}/{可选_语言路径}/{可选_游戏版本路径}/{实体类型}={实体ID}&xml=1</code></pre>
+            
+            <h4>获取 XML 的 URL 示例:</h4>
+            <ul class="list-unstyled">
+              <li><i class="fas fa-link me-1 text-primary"></i><strong>物品 (正式服, 俄语):</strong><br>
+                <code>https://www.wowhead.com/ru/item=19019&xml=1</code>
+              </li>
+              <li class="mt-2"><i class="fas fa-link me-1 text-primary"></i><strong>物品 (正式服, 德语):</strong><br>
+                <code>https://www.wowhead.com/de/item=19019&xml=1</code>
+              </li>
+              <li class="mt-2"><i class="fas fa-link me-1 text-primary"></i><strong>任务 (经典怀旧服, 默认英语):</strong><br>
+                <code>https://www.wowhead.com/classic/quest=1109&xml=1</code>
+              </li>
+              <li class="mt-2"><i class="fas fa-link me-1 text-primary"></i><strong>任务 (经典怀旧服, 俄语):</strong><br>
+                <code>https://www.wowhead.com/classic/ru/quest=1109&xml=1</code>
+              </li>
+              <li class="mt-2"><i class="fas fa-link me-1 text-primary"></i><strong>法术 (正式服, 俄语):</strong><br>
+                <code>https://www.wowhead.com/ru/spell=33786&xml=1</code>
+              </li>
+              <li class="mt-2"><i class="fas fa-link me-1 text-primary"></i><strong>带附加参数的物品 (例如宝石):</strong><br>
+                <code>https://www.wowhead.com/ru/item=25697&gems=23121&xml=1</code>
+                <br><small class="text-muted">(诸如 <code>gems</code>, <code>ench</code>, <code>pcs</code> 之类的参数在 <code>&xml=1</code> 参数之前添加到 URL 中。)</small>
+              </li>
+            </ul>
+            <p>可以通过将适当的版本和语言段替换到 URL 中，按照此模式构建不同游戏版本和语言的完整 URL 列表。</p>
+
+            <h3 id="section5_3">5.3. 从 XML 中可提取的数据</h3>
+            <p>Wowhead 的 XML Feed 可以提供有关所请求实体的广泛信息。不同实体类型的 XML 结构可能略有不同，但通常可以预期以下关键数据：</p>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>XML 标签 (示例)</th>
+                    <th>数据描述</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>&lt;name&gt;...&lt;/name&gt;</code></td>
+                    <td>实体的官方本地化名称。通常包含 CDATA。</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;icon displayId="..."&gt;...&lt;/icon&gt;</code></td>
+                    <td>图标文件名 (不带扩展名, 例如 <code>inv_sword_67</code>) 有时还有其唯一的 <code>displayId</code>。</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;link&gt;...&lt;/link&gt;</code></td>
+                    <td>指向 Wowhead 网站上实体页面的“美观”URL (slug)，通常包含名称。</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;quality id="..."&gt;...&lt;/quality&gt;</code></td>
+                    <td>物品品质 (例如 “史诗”, “稀有”) 及其数字标识符。</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;class id="..."&gt;...&lt;/class&gt;</code></td>
+                    <td>物品类别 (例如 “武器”, “护甲”)。</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;subclass id="..."&gt;...&lt;/subclass&gt;</code></td>
+                    <td>物品子类别 (例如 “剑”, “锁甲”)。</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;htmlTooltip&gt;...&lt;/htmlTooltip&gt;</code></td>
+                    <td>标准 Wowhead 浮动提示的完整 HTML 代码。如果不使用 <code>https://wow.zamimg.com/widgets/power.js</code>, 可用于直接显示。通常包含 CDATA。</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;json&gt;...&lt;/json&gt;</code></td>
+                    <td>关于对象的 JSON 格式常规数据 (在 CDATA 内)。需要额外的 JSON 解析。</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;jsonEquip&gt;...&lt;/jsonEquip&gt;</code></td>
+                    <td>JSON 格式的装备特定数据 (属性、护甲/武器类型、要求等，在 CDATA 内)。</td>
+                  </tr>
+                  <tr>
+                    <td>各种特定标签</td>
+                    <td>根据实体类型，可能存在带有任务等级、要求、法术的法术派系、奖励等的标签。</td>
+                  </tr>
+                  <tr>
+                    <td><code>&lt;error&gt;...&lt;/error&gt;</code></td>
+                    <td>如果找不到请求的对象或 Wowhead 端发生其他错误，XML 可能包含此标签及错误描述。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="alert alert-info mt-3" role="alert">
+              <i class="fas fa-info-circle me-2"></i>要正确解析包装在 CDATA 中的数据 (例如 <code>&lt;name&gt;</code> 或 <code>&lt;htmlTooltip&gt;</code> 的内容)，应使用 XML 解析器的相应方法 (例如 SimpleXML 中的字符串转换)。
+            </div>
+          </section>
+
+          <section id="section6" class="section">
+            <h2><i class="fas fa-balance-scale me-2"></i>6. <code>https://wow.zamimg.com/widgets/power.js</code> vs. XML: 优势与局限</h2>
+            <p>在使用 Wowhead 数据时，开发者主要有两种获取和显示数据的方式：使用官方 JavaScript 小部件 <code>power.js</code> 或直接解析 XML Feed。每种方法都有其优点和缺点。</p>
+
+            <div class="row mt-4">
+              <div class="col-md-12">
+                <h3 class="text-primary"><i class="fab fa-js-square me-2"></i><code>https://wow.zamimg.com/widgets/power.js</code></h3>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <h4><i class="fas fa-plus-circle text-success me-1"></i>优势:</h4>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>易于集成:</strong> 只需包含脚本并定义全局 <code>whTooltips</code> 对象。</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>自动化:</strong> 脚本会自动查找链接、生成提示的 HTML、添加图标和品质颜色。</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>交互性:</strong> 提供“实时”提示，可在提示内部切换信息 (例如物品等级、查看 3D 模型等)。</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>统一风格:</strong> 确保提示具有一致且可识别的 Wowhead 风格外观。</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>数据新鲜度:</strong> 提示信息始终是最新的，因为它在显示时直接从 Wowhead 服务器加载。</li>
+                </ul>
+              </div>
+              <div class="col-md-6 mb-3">
+                <h4><i class="fas fa-minus-circle text-danger me-1"></i>局限:</h4>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>全局配置:</strong> <code>whTooltips</code> 中的设置 (例如 <code>iconSize</code>, <code>colorLinks</code>) 应用于页面上的所有提示，这使得在没有变通方法的情况下难以实现单个链接行为的自定义。</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>外部资源依赖:</strong> 提示功能完全依赖于 <code>wow.zamimg.com</code> 服务器的可用性。</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>数据控制较少:</strong> 开发者收到的是预格式化的 HTML 提示；对原始数据进行自定义处理的直接访问受限。</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>潜在冲突:</strong> 不正确的实现或与页面上其他 JavaScript 库的冲突可能会干扰其操作。</li>
+                </ul>
+              </div>
+            </div>
+
+            <hr class="my-5"> 
+
+            <div class="row mt-4">
+              <div class="col-md-12">
+                <h3 class="text-info"><i class="fas fa-file-excel me-2"></i>XML Feed</h3>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <h4><i class="fas fa-plus-circle text-success me-1"></i>优势:</h4>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>直接数据访问:</strong> 检索结构化的原始数据 (名称、属性、描述、图标 ID 等) 以供自定义使用。</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>完全的显示控制:</strong> 能够为提示或任何其他信息表示方式创建完全自定义的设计。</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>本地缓存:</strong> XML 响应可以在您的服务器上高效缓存，从而减少对 Wowhead 可用性的依赖并显著加快用户的数据加载速度。</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>离线工作 (带缓存):</strong> 如果数据已缓存，即使与 Wowhead 的连接出现临时问题，信息也可能可用。</li>
+                  <li class="list-group-item"><i class="fas fa-check text-success me-2"></i><strong>特定细节检索:</strong> XML 可能包含比标准提示中显示的更多细节或属性。</li>
+                </ul>
+              </div>
+              <div class="col-md-6 mb-3">
+                <h4><i class="fas fa-minus-circle text-danger me-1"></i>局限:</h4>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>实现复杂性:</strong> 需要服务器端逻辑 (例如 PHP) 来发出 HTTP 请求、解析 XML 结构然后格式化 HTML。</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>无内置交互性:</strong> 所有类似于 <code>power.js</code> 提示的交互性都必须手动实现。</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>解析器维护需求:</strong> Wowhead XML Feed 的结构理论上可能会改变，这需要更新解析代码。</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>Wowhead 服务器负载:</strong> 如果没有正确有效的缓存，对 XML Feed 的频繁请求可能会给 Wowhead 服务器带来过大负载，并可能导致访问限制。</li>
+                  <li class="list-group-item"><i class="fas fa-times text-danger me-2"></i><strong>没有“开箱即用”的标准图标/样式:</strong> 所有视觉呈现，包括加载和显示图标，都由开发者负责。</li>
+                </ul>
+              </div>
+            </div>
+            <p class="mt-4 alert alert-light">这两种方法 (或其组合) 的选择取决于具体的项目需求、所需的自定义级别以及可用的开发资源。</p>
+          </section>
+
+          <section id="section7" class="section">
+            <h2><i class="fas fa-lightbulb me-2"></i>7. 实用技巧与建议</h2>
+            <p>以下是一些在处理 Wowhead Tooltips 和调试项目时可能会有帮助的技巧。</p>
+            
+            <h4><i class="fas fa-bug me-1"></i>调试 <code>https://wow.zamimg.com/widgets/power.js</code>:</h4>
+            <ul>
+              <li>始终检查浏览器的 <strong>JavaScript 控制台</strong> (通常用 F12 打开，“Console”标签页) 中是否有错误。页面上的任何 JavaScript 错误都可能干扰提示脚本的正常运行。</li>
+              <li>确保全局 JavaScript 对象 <code>whTooltips</code> 在页面上 <strong>早于</strong> <code>https://wow.zamimg.com/widgets/power.js</code> 脚本被包含之前定义。您可以在页面加载后在浏览器控制台中输入 <code>whTooltips</code> 来验证其存在和内容。</li>
+              <li>验证 <code>https://wow.zamimg.com/widgets/power.js</code> 脚本本身是否已由浏览器成功加载 (检查开发者工具中的“Network”/“网络”标签页)。响应状态应为 <code>200 OK</code>。</li>
+              <li>如果 Wowhead 链接未被处理 (未出现图标或提示)，请确保 <code>&lt;a&gt;</code> HTML 标签要么具有指向相应 Wowhead 页面的 <code>href</code> 属性，要么包含格式正确的 <code>data-wowhead="type=id&domain=language.version&..."</code> 属性。</li>
+            </ul>
+
+            <h4><i class="fas fa-cogs me-1"></i>使用 <code>domain</code> 参数:</h4>
+            <ul>
+              <li>始终对 <code>domain</code> 参数值使用小写字母 (例如 <code>ru.classic</code>, 而不是 <code>RU.Classic</code>)。</li>
+              <li>对于组合域 (语言 + 游戏版本), 始终使用 <code>语言.版本</code> 格式 (例如 <code>ru.classic</code>, <code>de.wotlk</code>)。<code>版本.语言</code> 格式 (例如 <code>classic.ru</code>) 是不正确的，可能无法工作或处理方式不可预测。</li>
+              <li>请记住，PTR 和 Beta 版本通常仅支持英文的浮动提示，即使您在 <code>domain</code> 参数中指定了其他语言前缀。</li>
+            </ul>
+
+            <h4><i class="fas fa-database me-1"></i>XML 与性能:</h4>
+            <ul>
+              <li><strong>始终缓存 XML 响应!</strong> 如果您使用 XML Feed 在服务器端检索数据，则必须实现缓存机制。在 WordPress 中, Transients API 非常适合此目的。
+                <ul>
+                  <li>设置合理的缓存生命周期: 例如，对于相对静态的数据 (物品/法术名称) 为 12-24 小时，对于可能更频繁更改的数据或 404 错误则设置较短时间 (1-6 小时)。</li>
+                </ul>
+              </li>
+              <li>避免在每次页面加载时为页面上的每个链接都向 Wowhead 发出“实时” XML 请求。这会产生巨大负载并减慢您的网站速度。最好在首次访问对象时获取数据，然后将其存储在缓存中。</li>
+            </ul>
+            
+            <h4><i class="fas fa-paint-brush me-1"></i>自定义外观 (使用 <code>power.js</code> 时):</h4>
+            <ul>
+              <li>尽管 <code>https://wow.zamimg.com/widgets/power.js</code> 本身会设置浮动提示的样式，但如果需要，您可以使用更具体的选择器或 <code>!important</code> 指令在主题的 CSS 中覆盖其某些 CSS 样式。但是，请谨慎操作，因为这可能会破坏提示的原始布局，或者在 <code>power.js</code> 脚本更新后停止工作。</li>
+              <li>要更改链接本身的外观 (文本、颜色), 请使用适当的短代码属性 (如前面讨论的插件中的 <code>name</code>, <code>color</code>, <code>style</code>) 或直接修改链接的 HTML 属性，并确保在 <code>whTooltips</code> 中设置了 <code>renameLinks: false</code> 和 <code>colorLinks: false</code>。</li>
+            </ul>
+
+            <h4><i class="fas fa-lightbulb-on me-1"></i>“技巧”与高级方面:</h4>
+            <ul>
+              <li><strong><code>data-wowhead</code> 中的扩展参数:</strong> <code>data-wowhead</code> 属性不仅可以包含基本的 <code>type=id&domain=language.version</code>, 还可以包含 <code>https://wow.zamimg.com/widgets/power.js</code> 可能考虑用于更精确提示显示的其他参数。例如，对于物品，这些可以包括：
+                <ul>
+                  <li><code>lvl=X</code> (角色等级，用于属性缩放)</li>
+                  <li><code>gems=ID1:ID2...</code> (镶嵌的宝石)</li>
+                  <li><code>ench=ID</code> (附魔)</li>
+                  <li><code>pcs=ID1:ID2...</code> (套装部件，用于显示套装奖励)</li>
+                  <li><code>bonus=ID1:ID2...</code> (用于具有变体的物品的奖励 ID)</li>
+                </ul>
+                这些参数允许脚本显示提示，就好像物品是以特定方式配置的一样。
+              </li>
+              <li><strong>使用 Wowhead 的品质 CSS 类:</strong> 如果 <code>colorLinks: true</code> 选项已设置 (或未设置并默认为 true), <code>https://wow.zamimg.com/widgets/power.js</code> 脚本会根据物品品质向链接添加 CSS 类 (例如 <code>q0</code>, <code>q1</code>, <code>q2</code>, <code>q3</code>, <code>q4</code>, <code>q5</code>, <code>q6</code>, <code>q7</code> 用于神器和传说物品)。如果您不喜欢 Wowhead 的默认颜色但希望按品质保持颜色差异，则可以在 CSS 中使用这些类进行额外样式设置。</li>
+              <li><strong>检查数据环境活动状态:</strong> <code>https://wow.zamimg.com/widgets/power.js</code> 脚本具有内部函数 (例如 <code>WH.isDataEnvActive(envId)</code>), 理论上可用于检查特定数据环境 (如 PTR, Beta) 在 Wowhead 端是否处于活动状态。这对于在网站上动态显示链接或信息可能很有用。</li>
+            </ul>
+             <div class="alert alert-warning mt-3" role="alert">
+              <i class="fas fa-exclamation-triangle me-2"></i>请记住，<code>https://wow.zamimg.com/widgets/power.js</code> 的内部函数和结构可能由 Wowhead 更改，恕不另行通知。由于这种方法的脆弱性，不建议在生产网站上直接使用未记录的内部函数。
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <footer class="pt-3 mt-4 text-muted border-top text-center">
+      &copy; Wowhead Tooltips Documentation Guide - May 2025
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.getElementById('sidebarMenu');
+      if (!sidebar) return; 
+
+      const sections = document.querySelectorAll('.section, .p-5.mb-4.bg-body-tertiary.rounded-3'); 
+      const navLinks = sidebar.querySelectorAll('.nav-link');
+      const navbarElement = document.querySelector('.navbar');
+      const navbarHeight = navbarElement ? navbarElement.offsetHeight : 56; 
+      
+      function activateLink() {
+        let current = '';
+        const scrollPosition = window.pageYOffset;
+
+        sections.forEach(section => {
+          if (section) { 
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            if (scrollPosition >= sectionTop - (navbarHeight + 45) && scrollPosition < sectionTop + sectionHeight - (navbarHeight + 45)) {
+              current = section.getAttribute('id');
+            }
+          }
+        });
+        
+        let anyLinkActive = false;
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          const href = link.getAttribute('href');
+          if (href && href.substring(1) === current) {
+            link.classList.add('active');
+            anyLinkActive = true;
+          }
+        });
+        
+        if (!anyLinkActive && navLinks.length > 0) {
+           if (sections.length > 0 && scrollPosition < sections[0].offsetTop - (navbarHeight + 45)) {
+                 navLinks[0].classList.add('active'); 
+            }
+        }
+      }
+      window.addEventListener('scroll', activateLink);
+      activateLink(); 
+    });
+  </script>
+</body>
+</html>
